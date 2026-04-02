@@ -6,7 +6,6 @@
   <title>Daily Word</title>
   <link href="https://fonts.googleapis.com/css2?family=Clear+Sans:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
   <style>
-    /* ─── Variables ─── */
     :root {
       --bg: #121213;
       --surface: #1a1a1b;
@@ -18,14 +17,13 @@
       --gray: #3a3a3c;
       --key-bg: #818384;
       --key-text: #ffffff;
-      --tile-size: 62px;
+      --tile-size: 54px;
       --gap: 5px;
       --font-body: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
       --font-display: 'Playfair Display', Georgia, serif;
       --modal-bg: #1a1a1b;
     }
 
-    /* ─── Reset & Base ─── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -39,10 +37,9 @@
       overflow-x: hidden;
     }
 
-    /* ─── Header ─── */
     header {
       width: 100%;
-      max-width: 500px;
+      max-width: 560px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -76,7 +73,6 @@
     }
     #hint-btn:hover { color: var(--text); border-color: var(--text-muted); }
 
-    /* ─── Toast ─── */
     #toast-container {
       position: fixed;
       top: 70px;
@@ -98,15 +94,15 @@
       font-size: 0.85rem;
       font-weight: 700;
       letter-spacing: 0.04em;
-      animation: toastIn 0.2s ease, toastOut 0.3s ease 1.7s forwards;
       text-align: center;
-      max-width: 280px;
+      max-width: 320px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
     }
 
     @keyframes toastIn  { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes toastOut { from { opacity: 1; } to { opacity: 0; } }
+    .toast { animation: toastIn 0.2s ease; }
 
-    /* ─── Board ─── */
     #board-container {
       flex: 1;
       display: flex;
@@ -117,17 +113,16 @@
 
     #board {
       display: grid;
-      grid-template-rows: repeat(6, var(--tile-size));
+      grid-template-rows: repeat(8, var(--tile-size));
       gap: var(--gap);
     }
 
     .row {
       display: grid;
-      grid-template-columns: repeat(6, var(--tile-size));
+      grid-template-columns: repeat(8, var(--tile-size));
       gap: var(--gap);
     }
 
-    /* ─── Tiles ─── */
     .tile {
       width: var(--tile-size);
       height: var(--tile-size);
@@ -135,7 +130,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
+      font-size: 1.6rem;
       font-weight: 700;
       text-transform: uppercase;
       user-select: none;
@@ -146,17 +141,13 @@
 
     .tile[data-letter] { border-color: #565758; }
 
-    /* pop animation on key press */
-    .tile.pop {
-      animation: tilePop 0.1s ease;
-    }
+    .tile.pop { animation: tilePop 0.1s ease; }
     @keyframes tilePop {
       0%   { transform: scale(1); }
       50%  { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
 
-    /* shake on invalid */
     .row.shake { animation: rowShake 0.5s ease; }
     @keyframes rowShake {
       0%, 100% { transform: translateX(0); }
@@ -164,7 +155,6 @@
       30%, 70% { transform: translateX(4px); }
     }
 
-    /* bounce on win */
     .tile.bounce { animation: tileBounce 0.6s ease forwards; }
     @keyframes tileBounce {
       0%   { transform: translateY(0); }
@@ -174,7 +164,6 @@
       100% { transform: translateY(0); }
     }
 
-    /* flip reveal */
     .tile-inner {
       width: 100%;
       height: 100%;
@@ -185,8 +174,6 @@
       transition: transform 0.5s ease;
       position: relative;
     }
-
-    .tile.flip .tile-inner { transform: rotateX(360deg); }
 
     .tile-front, .tile-back {
       position: absolute;
@@ -200,17 +187,14 @@
 
     .tile-back { transform: rotateX(180deg); }
 
-    /* color states applied to tile-inner */
-    .tile.correct .tile-inner { background: var(--green); border-color: var(--green); }
-    .tile.present .tile-inner { background: var(--yellow); border-color: var(--yellow); }
-    .tile.absent  .tile-inner { background: var(--gray);   border-color: var(--gray);  }
+    .tile.correct .tile-inner { background: var(--green); }
+    .tile.present .tile-inner { background: var(--yellow); }
+    .tile.absent  .tile-inner { background: var(--gray); }
 
-    /* keep the border on the outer tile too after reveal */
     .tile.correct { border-color: var(--green); }
     .tile.present { border-color: var(--yellow); }
     .tile.absent  { border-color: var(--gray); }
 
-    /* ─── Keyboard ─── */
     #keyboard {
       width: 100%;
       max-width: 500px;
@@ -256,7 +240,6 @@
     .key.present { background: var(--yellow); }
     .key.absent  { background: var(--gray); }
 
-    /* ─── Modal Overlay ─── */
     #modal-overlay {
       display: none;
       position: fixed;
@@ -265,19 +248,16 @@
       z-index: 300;
       align-items: center;
       justify-content: center;
-      animation: overlayIn 0.4s ease forwards;
     }
 
     #modal-overlay.visible { display: flex; }
-
-    @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
 
     #modal {
       background: var(--modal-bg);
       border: 1px solid #3a3a3c;
       border-radius: 12px;
       padding: 40px 36px;
-      max-width: 380px;
+      max-width: 400px;
       width: 90%;
       text-align: center;
       position: relative;
@@ -313,7 +293,7 @@
     #modal .word-reveal {
       font-family: var(--font-body);
       font-weight: 700;
-      font-size: 2.4rem;
+      font-size: 2.2rem;
       letter-spacing: 0.18em;
       color: var(--green);
       margin-bottom: 24px;
@@ -353,9 +333,9 @@
     #continue-btn:hover { background: #e0e0e0; }
     #continue-btn:active { transform: scale(0.97); }
 
-    /* ─── Responsive ─── */
-    @media (max-width: 400px) {
-      :root { --tile-size: 52px; }
+    @media (max-width: 480px) {
+      :root { --tile-size: 40px; }
+      .tile { font-size: 1.2rem; }
       .key { height: 50px; min-width: 32px; max-width: 32px; font-size: 0.72rem; }
       .key.wide { max-width: 52px; font-size: 0.65rem; }
     }
@@ -363,99 +343,75 @@
 </head>
 <body>
 
-<!-- ─── Header ─── -->
 <header>
   <h1>Daily Word</h1>
   <button id="hint-btn">Hint</button>
 </header>
 
-<!-- ─── Toast container ─── -->
 <div id="toast-container"></div>
 
-<!-- ─── Board ─── -->
 <div id="board-container">
   <div id="board"></div>
 </div>
 
-<!-- ─── Keyboard ─── -->
 <div id="keyboard">
   <div class="kb-row" id="kb-row-1"></div>
   <div class="kb-row" id="kb-row-2"></div>
   <div class="kb-row" id="kb-row-3"></div>
 </div>
 
-<!-- ─── Modal ─── -->
 <div id="modal-overlay">
   <div id="modal">
-    <span class="tag">Thing I love about you #20</span>
+    <span class="tag">Thing I love about you #19</span>
     <h2>Today's word was</h2>
-    <div class="word-reveal">PRETTY</div>
+    <div class="word-reveal">HUMOROUS</div>
     <div class="divider"></div>
-    <p>You are the most prettiest baby, my chellubie. The most beautiful girl both at heart and soul.</p>
-    <button id="continue-btn">Continue</button>
+    <p>They say that laughter increases your life span. If that really is true, thanks to you, I'd be immortal.</p>
+    <button id="continue-btn">Continue ♡</button>
   </div>
 </div>
 
-<!-- ─── JavaScript ─── -->
 <script>
-  /* ═══════════════════════════════════════
-     CONFIG
-  ═══════════════════════════════════════ */
-  const WORD        = 'PRETTY';
-  const WORD_LENGTH = WORD.length;   // 6
-  const MAX_GUESSES = 6;
-  const HINT_TEXT   = 'A word I use when I look at you and forget all my problems.';
+  const WORD        = 'HUMOROUS';
+  const WORD_LENGTH = WORD.length;   // 8
+  const MAX_GUESSES = 8;
+  const HINT_TEXT   = 'I express this not only through words, but even through sounds ;)';
 
-  /* ═══════════════════════════════════════
-     STATE
-  ═══════════════════════════════════════ */
-  let currentRow    = 0;
-  let currentCol    = 0;
-  let currentGuess  = [];
-  let gameOver      = false;
+  let currentRow   = 0;
+  let currentCol   = 0;
+  let currentGuess = [];
+  let gameOver     = false;
 
-  /* ═══════════════════════════════════════
-     BUILD BOARD
-  ═══════════════════════════════════════ */
+  // Build board
   const board = document.getElementById('board');
-
   for (let r = 0; r < MAX_GUESSES; r++) {
     const row = document.createElement('div');
     row.classList.add('row');
     row.id = `row-${r}`;
-
     for (let c = 0; c < WORD_LENGTH; c++) {
       const tile = document.createElement('div');
       tile.classList.add('tile');
       tile.id = `tile-${r}-${c}`;
-
       const inner = document.createElement('div');
       inner.classList.add('tile-inner');
-
       const front = document.createElement('div');
       front.classList.add('tile-front');
-
       const back = document.createElement('div');
       back.classList.add('tile-back');
-
       inner.appendChild(front);
       inner.appendChild(back);
       tile.appendChild(inner);
       row.appendChild(tile);
     }
-
     board.appendChild(row);
   }
 
-  /* ═══════════════════════════════════════
-     BUILD KEYBOARD
-  ═══════════════════════════════════════ */
+  // Build keyboard
   const KB_ROWS = [
     ['Q','W','E','R','T','Y','U','I','O','P'],
     ['A','S','D','F','G','H','J','K','L'],
     ['ENTER','Z','X','C','V','B','N','M','⌫']
   ];
-
   KB_ROWS.forEach((keys, i) => {
     const rowEl = document.getElementById(`kb-row-${i + 1}`);
     keys.forEach(k => {
@@ -469,47 +425,31 @@
     });
   });
 
-  /* ═══════════════════════════════════════
-     INPUT HANDLING
-  ═══════════════════════════════════════ */
+  // Input
   document.addEventListener('keydown', e => {
     if (gameOver) return;
-    if (e.key === 'Enter')      handleKey('ENTER');
+    if (e.key === 'Enter') handleKey('ENTER');
     else if (e.key === 'Backspace') handleKey('⌫');
     else if (/^[a-zA-Z]$/.test(e.key)) handleKey(e.key.toUpperCase());
   });
 
   function handleKey(key) {
     if (gameOver) return;
-
-    if (key === '⌫') {
-      deleteLetter();
-    } else if (key === 'ENTER') {
-      submitGuess();
-    } else if (/^[A-Z]$/.test(key)) {
-      addLetter(key);
-    }
+    if (key === '⌫') deleteLetter();
+    else if (key === 'ENTER') submitGuess();
+    else if (/^[A-Z]$/.test(key)) addLetter(key);
   }
 
-  /* ═══════════════════════════════════════
-     LETTER ADD / DELETE
-  ═══════════════════════════════════════ */
   function addLetter(letter) {
     if (currentCol >= WORD_LENGTH) return;
-
     currentGuess.push(letter);
     const tile = getTile(currentRow, currentCol);
-    const front = tile.querySelector('.tile-front');
-    const back  = tile.querySelector('.tile-back');
-    front.textContent = letter;
-    back.textContent  = letter;
+    tile.querySelector('.tile-front').textContent = letter;
+    tile.querySelector('.tile-back').textContent  = letter;
     tile.dataset.letter = letter;
-
-    // pop animation
     tile.classList.remove('pop');
-    void tile.offsetWidth; // reflow
+    void tile.offsetWidth;
     tile.classList.add('pop');
-
     currentCol++;
   }
 
@@ -517,38 +457,31 @@
     if (currentCol <= 0) return;
     currentCol--;
     currentGuess.pop();
-
     const tile = getTile(currentRow, currentCol);
     tile.querySelector('.tile-front').textContent = '';
     tile.querySelector('.tile-back').textContent  = '';
     delete tile.dataset.letter;
   }
 
-  /* ═══════════════════════════════════════
-     SUBMIT GUESS
-  ═══════════════════════════════════════ */
   function submitGuess() {
     if (currentCol < WORD_LENGTH) {
       showToast('Not enough letters');
       shakeRow(currentRow);
       return;
     }
-
-    const guess = currentGuess.join('');
+    const guess  = currentGuess.join('');
     const result = evaluate(guess);
 
     revealRow(currentRow, guess, result, () => {
       updateKeyboard(guess, result);
-
       if (guess === WORD) {
         bounceRow(currentRow);
         gameOver = true;
-        setTimeout(showModal, 1200);
+        setTimeout(showModal, 1400);
       } else {
         currentRow++;
         currentCol   = 0;
         currentGuess = [];
-
         if (currentRow >= MAX_GUESSES) {
           gameOver = true;
           setTimeout(() => showToast(WORD, 4000), 400);
@@ -557,67 +490,47 @@
     });
   }
 
-  /* ═══════════════════════════════════════
-     EVALUATE GUESS
-  ═══════════════════════════════════════ */
   function evaluate(guess) {
-    const result   = Array(WORD_LENGTH).fill('absent');
-    const wordArr  = WORD.split('');
-    const guessArr = guess.split('');
-    const wordUsed = Array(WORD_LENGTH).fill(false);
+    const result    = Array(WORD_LENGTH).fill('absent');
+    const wordArr   = WORD.split('');
+    const guessArr  = guess.split('');
+    const wordUsed  = Array(WORD_LENGTH).fill(false);
     const guessUsed = Array(WORD_LENGTH).fill(false);
 
-    // Pass 1: correct
     for (let i = 0; i < WORD_LENGTH; i++) {
       if (guessArr[i] === wordArr[i]) {
-        result[i] = 'correct';
+        result[i]    = 'correct';
         wordUsed[i]  = true;
         guessUsed[i] = true;
       }
     }
-
-    // Pass 2: present
     for (let i = 0; i < WORD_LENGTH; i++) {
       if (guessUsed[i]) continue;
       for (let j = 0; j < WORD_LENGTH; j++) {
         if (!wordUsed[j] && guessArr[i] === wordArr[j]) {
-          result[i] = 'present';
+          result[i]   = 'present';
           wordUsed[j] = true;
           break;
         }
       }
     }
-
     return result;
   }
 
-  /* ═══════════════════════════════════════
-     REVEAL ROW (flip animation)
-  ═══════════════════════════════════════ */
   function revealRow(row, guess, result, callback) {
-    const DELAY = 300; // ms between tiles
-
+    const DELAY = 300;
     for (let c = 0; c < WORD_LENGTH; c++) {
-      const tile = getTile(row, c);
-
+      const tile  = getTile(row, c);
+      const inner = tile.querySelector('.tile-inner');
       setTimeout(() => {
         tile.classList.add(result[c]);
-
-        // Trigger the CSS flip by adding 'flip' class
-        // We use a small re-trigger approach via style
-        const inner = tile.querySelector('.tile-inner');
         inner.style.transition = 'transform 0.5s ease';
         inner.style.transform  = 'rotateX(360deg)';
       }, c * DELAY);
     }
-
-    // Callback after last tile finishes flipping
     setTimeout(callback, WORD_LENGTH * DELAY + 500);
   }
 
-  /* ═══════════════════════════════════════
-     SHAKE ROW
-  ═══════════════════════════════════════ */
   function shakeRow(row) {
     const rowEl = document.getElementById(`row-${row}`);
     rowEl.classList.remove('shake');
@@ -625,21 +538,12 @@
     rowEl.classList.add('shake');
   }
 
-  /* ═══════════════════════════════════════
-     BOUNCE ROW (win)
-  ═══════════════════════════════════════ */
   function bounceRow(row) {
     for (let c = 0; c < WORD_LENGTH; c++) {
-      const tile = getTile(row, c);
-      setTimeout(() => {
-        tile.classList.add('bounce');
-      }, c * 100);
+      setTimeout(() => getTile(row, c).classList.add('bounce'), c * 100);
     }
   }
 
-  /* ═══════════════════════════════════════
-     UPDATE KEYBOARD COLORS
-  ═══════════════════════════════════════ */
   const KEY_PRIORITY = { correct: 3, present: 2, absent: 1 };
 
   function updateKeyboard(guess, result) {
@@ -648,12 +552,9 @@
       const state  = result[i];
       const btn    = document.querySelector(`.key[data-key="${letter}"]`);
       if (!btn) continue;
-
       const current = btn.classList.contains('correct') ? 'correct'
                     : btn.classList.contains('present') ? 'present'
-                    : btn.classList.contains('absent')  ? 'absent'
-                    : null;
-
+                    : btn.classList.contains('absent')  ? 'absent' : null;
       if (!current || KEY_PRIORITY[state] > KEY_PRIORITY[current]) {
         if (current) btn.classList.remove(current);
         btn.classList.add(state);
@@ -661,24 +562,20 @@
     }
   }
 
-  /* ═══════════════════════════════════════
-     TOAST
-  ═══════════════════════════════════════ */
   function showToast(msg, duration = 2000) {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
     toast.classList.add('toast');
     toast.textContent = msg;
     container.appendChild(toast);
-    setTimeout(() => toast.remove(), duration);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 300);
+    }, duration - 300);
   }
 
-  /* ═══════════════════════════════════════
-     MODAL
-  ═══════════════════════════════════════ */
   function showModal() {
-    const overlay = document.getElementById('modal-overlay');
-    overlay.classList.add('visible');
+    document.getElementById('modal-overlay').classList.add('visible');
   }
 
   document.getElementById('continue-btn').addEventListener('click', () => {
@@ -691,16 +588,10 @@
     }
   });
 
-  /* ═══════════════════════════════════════
-     HINT
-  ═══════════════════════════════════════ */
   document.getElementById('hint-btn').addEventListener('click', () => {
     showToast(HINT_TEXT, 4000);
   });
 
-  /* ═══════════════════════════════════════
-     UTILITY
-  ═══════════════════════════════════════ */
   function getTile(row, col) {
     return document.getElementById(`tile-${row}-${col}`);
   }
