@@ -17,15 +17,13 @@
       --gray: #3a3a3c;
       --key-bg: #818384;
       --key-text: #ffffff;
-      --tile-size: 54px;
+      --tile-size: 62px;
       --gap: 5px;
       --font-body: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
       --font-display: 'Playfair Display', Georgia, serif;
       --modal-bg: #1a1a1b;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       background: var(--bg);
       color: var(--text);
@@ -36,7 +34,6 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
-
     header {
       width: 100%;
       max-width: 560px;
@@ -47,7 +44,6 @@
       border-bottom: 1px solid var(--border);
       position: relative;
     }
-
     header h1 {
       font-family: var(--font-body);
       font-weight: 700;
@@ -55,7 +51,6 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
-
     #hint-btn {
       position: absolute;
       right: 16px;
@@ -72,7 +67,6 @@
       transition: color 0.2s, border-color 0.2s;
     }
     #hint-btn:hover { color: var(--text); border-color: var(--text-muted); }
-
     #toast-container {
       position: fixed;
       top: 70px;
@@ -85,7 +79,6 @@
       gap: 8px;
       pointer-events: none;
     }
-
     .toast {
       background: var(--text);
       color: var(--bg);
@@ -99,10 +92,8 @@
       opacity: 1;
       transition: opacity 0.3s ease;
     }
-
     @keyframes toastIn  { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
     .toast { animation: toastIn 0.2s ease; }
-
     #board-container {
       flex: 1;
       display: flex;
@@ -110,19 +101,16 @@
       justify-content: center;
       padding: 20px 0 10px;
     }
-
     #board {
-      display: grid;
-      grid-template-rows: repeat(8, var(--tile-size));
+      display: flex;
+      flex-direction: column;
       gap: var(--gap);
     }
-
     .row {
-      display: grid;
-      grid-template-columns: repeat(8, var(--tile-size));
+      display: flex;
+      flex-direction: row;
       gap: var(--gap);
     }
-
     .tile {
       width: var(--tile-size);
       height: var(--tile-size);
@@ -138,23 +126,19 @@
       transition: border-color 0.05s;
       perspective: 250px;
     }
-
     .tile[data-letter] { border-color: #565758; }
-
     .tile.pop { animation: tilePop 0.1s ease; }
     @keyframes tilePop {
       0%   { transform: scale(1); }
       50%  { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-
     .row.shake { animation: rowShake 0.5s ease; }
     @keyframes rowShake {
       0%, 100% { transform: translateX(0); }
       10%, 50%, 90% { transform: translateX(-4px); }
       30%, 70% { transform: translateX(4px); }
     }
-
     .tile.bounce { animation: tileBounce 0.6s ease forwards; }
     @keyframes tileBounce {
       0%   { transform: translateY(0); }
@@ -163,7 +147,6 @@
       80%  { transform: translateY(-16px); }
       100% { transform: translateY(0); }
     }
-
     .tile-inner {
       width: 100%;
       height: 100%;
@@ -174,7 +157,6 @@
       transition: transform 0.5s ease;
       position: relative;
     }
-
     .tile-front, .tile-back {
       position: absolute;
       width: 100%;
@@ -184,17 +166,13 @@
       justify-content: center;
       backface-visibility: hidden;
     }
-
     .tile-back { transform: rotateX(180deg); }
-
     .tile.correct .tile-inner { background: var(--green); }
     .tile.present .tile-inner { background: var(--yellow); }
     .tile.absent  .tile-inner { background: var(--gray); }
-
     .tile.correct { border-color: var(--green); }
     .tile.present { border-color: var(--yellow); }
     .tile.absent  { border-color: var(--gray); }
-
     #keyboard {
       width: 100%;
       max-width: 500px;
@@ -203,13 +181,11 @@
       flex-direction: column;
       gap: 8px;
     }
-
     .kb-row {
       display: flex;
       justify-content: center;
       gap: 6px;
     }
-
     .key {
       height: 58px;
       min-width: 43px;
@@ -232,14 +208,11 @@
       max-width: 43px;
       user-select: none;
     }
-
     .key.wide { max-width: 65px; font-size: 0.72rem; }
     .key:active { transform: scale(0.94); }
-
     .key.correct { background: var(--green); }
     .key.present { background: var(--yellow); }
     .key.absent  { background: var(--gray); }
-
     #modal-overlay {
       display: none;
       position: fixed;
@@ -249,9 +222,7 @@
       align-items: center;
       justify-content: center;
     }
-
     #modal-overlay.visible { display: flex; }
-
     #modal {
       background: var(--modal-bg);
       border: 1px solid #3a3a3c;
@@ -264,12 +235,10 @@
       animation: modalSlideIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
       box-shadow: 0 24px 60px rgba(0,0,0,0.7);
     }
-
     @keyframes modalSlideIn {
       from { opacity: 0; transform: translateY(30px) scale(0.95); }
       to   { opacity: 1; transform: translateY(0)   scale(1); }
     }
-
     #modal .tag {
       font-size: 0.72rem;
       font-weight: 700;
@@ -279,7 +248,6 @@
       margin-bottom: 20px;
       display: block;
     }
-
     #modal h2 {
       font-family: var(--font-display);
       font-style: italic;
@@ -289,7 +257,6 @@
       margin-bottom: 8px;
       letter-spacing: 0.02em;
     }
-
     #modal .word-reveal {
       font-family: var(--font-body);
       font-weight: 700;
@@ -299,14 +266,12 @@
       margin-bottom: 24px;
       text-transform: uppercase;
     }
-
     #modal .divider {
       width: 40px;
       height: 1px;
       background: var(--border);
       margin: 0 auto 24px;
     }
-
     #modal p {
       font-family: var(--font-display);
       font-style: italic;
@@ -315,7 +280,6 @@
       color: #d4d4d4;
       margin-bottom: 32px;
     }
-
     #continue-btn {
       background: var(--text);
       color: var(--bg);
@@ -332,9 +296,8 @@
     }
     #continue-btn:hover { background: #e0e0e0; }
     #continue-btn:active { transform: scale(0.97); }
-
     @media (max-width: 480px) {
-      :root { --tile-size: 40px; }
+      :root { --tile-size: 44px; }
       .tile { font-size: 1.2rem; }
       .key { height: 50px; min-width: 32px; max-width: 32px; font-size: 0.72rem; }
       .key.wide { max-width: 52px; font-size: 0.65rem; }
@@ -342,47 +305,41 @@
   </style>
 </head>
 <body>
-
 <header>
   <h1>Daily Word</h1>
   <button id="hint-btn">Hint</button>
 </header>
-
 <div id="toast-container"></div>
-
 <div id="board-container">
   <div id="board"></div>
 </div>
-
 <div id="keyboard">
   <div class="kb-row" id="kb-row-1"></div>
   <div class="kb-row" id="kb-row-2"></div>
   <div class="kb-row" id="kb-row-3"></div>
 </div>
-
 <div id="modal-overlay">
   <div id="modal">
     <span class="tag">Thing I love about you #18</span>
     <h2>Today's word was</h2>
     <div class="word-reveal">WITTY</div>
     <div class="divider"></div>
-    <p>You are right, this is exactly how you pulled me. It's one of my favorite about you. You always catch me off guard.</p>
+    <p>You are right, this is exactly how you pulled me. It's one of my favorites about you. You always catch me off guard.</p>
     <button id="continue-btn">Continue ♡</button>
   </div>
 </div>
-
 <script>
   const WORD        = 'WITTY';
-  const WORD_LENGTH = WORD.length;   // 8
-  const MAX_GUESSES = 5;
-  const HINT_TEXT   = 'It's all about timing....and a little charisma...';
+  const WORD_LENGTH = WORD.length;   // 5
+  const MAX_GUESSES = 6;
+  const HINT_TEXT   = "It's all about timing... and a little charisma...";
 
   let currentRow   = 0;
   let currentCol   = 0;
   let currentGuess = [];
   let gameOver     = false;
 
-  // Build board
+  // Build board dynamically based on WORD_LENGTH and MAX_GUESSES
   const board = document.getElementById('board');
   for (let r = 0; r < MAX_GUESSES; r++) {
     const row = document.createElement('div');
@@ -471,7 +428,6 @@
     }
     const guess  = currentGuess.join('');
     const result = evaluate(guess);
-
     revealRow(currentRow, guess, result, () => {
       updateKeyboard(guess, result);
       if (guess === WORD) {
@@ -496,7 +452,6 @@
     const guessArr  = guess.split('');
     const wordUsed  = Array(WORD_LENGTH).fill(false);
     const guessUsed = Array(WORD_LENGTH).fill(false);
-
     for (let i = 0; i < WORD_LENGTH; i++) {
       if (guessArr[i] === wordArr[i]) {
         result[i]    = 'correct';
@@ -545,7 +500,6 @@
   }
 
   const KEY_PRIORITY = { correct: 3, present: 2, absent: 1 };
-
   function updateKeyboard(guess, result) {
     for (let i = 0; i < WORD_LENGTH; i++) {
       const letter = guess[i];
