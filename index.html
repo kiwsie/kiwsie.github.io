@@ -17,7 +17,7 @@
       --gray: #3a3a3c;
       --key-bg: #818384;
       --key-text: #ffffff;
-      --tile-size: 62px;
+      --tile-size: 52px;
       --gap: 5px;
       --font-body: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
       --font-display: 'Playfair Display', Georgia, serif;
@@ -36,7 +36,7 @@
     }
     header {
       width: 100%;
-      max-width: 560px;
+      max-width: 600px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -88,18 +88,18 @@
       font-weight: 700;
       letter-spacing: 0.04em;
       text-align: center;
-      max-width: 320px;
+      max-width: 360px;
       opacity: 1;
       transition: opacity 0.3s ease;
     }
-    @keyframes toastIn  { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
     .toast { animation: toastIn 0.2s ease; }
     #board-container {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px 0 10px;
+      padding: 16px 0 8px;
     }
     #board {
       display: flex;
@@ -118,7 +118,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.6rem;
+      font-size: 1.3rem;
       font-weight: 700;
       text-transform: uppercase;
       user-select: none;
@@ -228,7 +228,7 @@
       border: 1px solid #3a3a3c;
       border-radius: 12px;
       padding: 40px 36px;
-      max-width: 400px;
+      max-width: 420px;
       width: 90%;
       text-align: center;
       position: relative;
@@ -260,7 +260,7 @@
     #modal .word-reveal {
       font-family: var(--font-body);
       font-weight: 700;
-      font-size: 2.2rem;
+      font-size: 1.8rem;
       letter-spacing: 0.18em;
       color: var(--green);
       margin-bottom: 24px;
@@ -296,11 +296,11 @@
     }
     #continue-btn:hover { background: #e0e0e0; }
     #continue-btn:active { transform: scale(0.97); }
-    @media (max-width: 480px) {
-      :root { --tile-size: 44px; }
-      .tile { font-size: 1.2rem; }
-      .key { height: 50px; min-width: 32px; max-width: 32px; font-size: 0.72rem; }
-      .key.wide { max-width: 52px; font-size: 0.65rem; }
+    @media (max-width: 520px) {
+      :root { --tile-size: 36px; --gap: 4px; }
+      .tile { font-size: 1rem; }
+      .key { height: 46px; min-width: 30px; max-width: 30px; font-size: 0.65rem; }
+      .key.wide { max-width: 48px; font-size: 0.58rem; }
     }
   </style>
 </head>
@@ -320,26 +320,25 @@
 </div>
 <div id="modal-overlay">
   <div id="modal">
-    <span class="tag">Thing I love about you #18</span>
+    <span class="tag">Thing I love about you</span>
     <h2>Today's word was</h2>
-    <div class="word-reveal">WITTY</div>
+    <div class="word-reveal">ATTENTIVE</div>
     <div class="divider"></div>
-    <p>You are right, this is exactly how you pulled me. It's one of my favorites about you. You always catch me off guard.</p>
+    <p>I feel so cared for and loved, especially when you watched MoFy and B99 for me. You make my heart feel so warm when you remember stuff, and go out of your way to do things like that for me.</p>
     <button id="continue-btn">Continue ♡</button>
   </div>
 </div>
 <script>
-  const WORD        = 'WITTY';
-  const WORD_LENGTH = WORD.length;   // 5
-  const MAX_GUESSES = 6;
-  const HINT_TEXT   = "It's all about timing... and a little charisma...";
+  const WORD        = 'ATTENTIVE';
+  const WORD_LENGTH = WORD.length;
+  const MAX_GUESSES = 9;
+  const HINT_TEXT   = "Let's be honest, you started liking BTS for me… you really notice the little things, don't you?";
 
   let currentRow   = 0;
   let currentCol   = 0;
   let currentGuess = [];
   let gameOver     = false;
 
-  // Build board dynamically based on WORD_LENGTH and MAX_GUESSES
   const board = document.getElementById('board');
   for (let r = 0; r < MAX_GUESSES; r++) {
     const row = document.createElement('div');
@@ -363,7 +362,6 @@
     board.appendChild(row);
   }
 
-  // Build keyboard
   const KB_ROWS = [
     ['Q','W','E','R','T','Y','U','I','O','P'],
     ['A','S','D','F','G','H','J','K','L'],
@@ -382,7 +380,6 @@
     });
   });
 
-  // Input
   document.addEventListener('keydown', e => {
     if (gameOver) return;
     if (e.key === 'Enter') handleKey('ENTER');
@@ -473,7 +470,7 @@
   }
 
   function revealRow(row, guess, result, callback) {
-    const DELAY = 300;
+    const DELAY = 250;
     for (let c = 0; c < WORD_LENGTH; c++) {
       const tile  = getTile(row, c);
       const inner = tile.querySelector('.tile-inner');
@@ -543,7 +540,7 @@
   });
 
   document.getElementById('hint-btn').addEventListener('click', () => {
-    showToast(HINT_TEXT, 4000);
+    showToast(HINT_TEXT, 5000);
   });
 
   function getTile(row, col) {
