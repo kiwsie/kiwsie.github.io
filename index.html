@@ -3,27 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daily Word</title>
-  <link href="https://fonts.googleapis.com/css2?family=Clear+Sans:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+  <title>Daily Word #16</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,700;1,400;1,600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #121213;
-      --surface: #1a1a1b;
-      --border: #3a3a3c;
-      --text: #ffffff;
-      --text-muted: #818384;
-      --green: #538d4e;
-      --yellow: #b59f3b;
-      --gray: #3a3a3c;
-      --key-bg: #818384;
-      --key-text: #ffffff;
+      --bg: #0e0e10;
+      --surface: #17171a;
+      --border: #2e2e33;
+      --text: #f0ece4;
+      --text-muted: #6b6870;
+      --green: #4e8c6a;
+      --yellow: #b59a3b;
+      --gray: #2e2e33;
+      --key-bg: #2a2a30;
+      --key-text: #c8c4bc;
       --tile-size: 52px;
       --gap: 5px;
-      --font-body: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
-      --font-display: 'Playfair Display', Georgia, serif;
-      --modal-bg: #1a1a1b;
+      --font-body: 'DM Mono', 'Courier New', monospace;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --modal-bg: #131316;
+      --accent: #c4a882;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       background: var(--bg);
       color: var(--text);
@@ -34,39 +36,65 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
+
+    /* Subtle noise texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
     header {
       width: 100%;
       max-width: 600px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 14px 16px;
+      padding: 18px 16px 14px;
       border-bottom: 1px solid var(--border);
       position: relative;
+      z-index: 1;
     }
+
+    .header-left {
+      position: absolute;
+      left: 16px;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
     header h1 {
       font-family: var(--font-body);
-      font-weight: 700;
-      font-size: 1.75rem;
-      letter-spacing: 0.08em;
+      font-weight: 500;
+      font-size: 0.85rem;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
+      color: var(--text);
     }
+
     #hint-btn {
       position: absolute;
       right: 16px;
       background: none;
       border: 1px solid var(--border);
       color: var(--text-muted);
-      font-size: 0.72rem;
+      font-size: 0.6rem;
       font-family: var(--font-body);
-      letter-spacing: 0.05em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      padding: 6px 12px;
-      border-radius: 4px;
+      padding: 5px 10px;
+      border-radius: 2px;
       cursor: pointer;
       transition: color 0.2s, border-color 0.2s;
     }
-    #hint-btn:hover { color: var(--text); border-color: var(--text-muted); }
+    #hint-btn:hover { color: var(--accent); border-color: var(--accent); }
+
     #toast-container {
       position: fixed;
       top: 70px;
@@ -79,58 +107,66 @@
       gap: 8px;
       pointer-events: none;
     }
+
     .toast {
       background: var(--text);
       color: var(--bg);
       padding: 10px 18px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
+      border-radius: 2px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
       text-align: center;
       max-width: 360px;
+      font-family: var(--font-body);
       opacity: 1;
       transition: opacity 0.3s ease;
+      animation: toastIn 0.2s ease;
     }
     @keyframes toastIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-    .toast { animation: toastIn 0.2s ease; }
+
     #board-container {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px 0 8px;
+      padding: 20px 0 10px;
+      position: relative;
+      z-index: 1;
     }
+
     #board {
       display: flex;
       flex-direction: column;
       gap: var(--gap);
     }
+
     .row {
       display: flex;
       flex-direction: row;
       gap: var(--gap);
     }
+
     .tile {
       width: var(--tile-size);
       height: var(--tile-size);
-      border: 2px solid var(--border);
+      border: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
-      font-weight: 700;
+      font-size: 1.15rem;
+      font-weight: 500;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
       user-select: none;
       position: relative;
-      transition: border-color 0.05s;
       perspective: 250px;
     }
-    .tile[data-letter] { border-color: #565758; }
+    .tile[data-letter] { border-color: #4a4a52; }
     .tile.pop { animation: tilePop 0.1s ease; }
     @keyframes tilePop {
       0%   { transform: scale(1); }
-      50%  { transform: scale(1.1); }
+      50%  { transform: scale(1.08); }
       100% { transform: scale(1); }
     }
     .row.shake { animation: rowShake 0.5s ease; }
@@ -142,11 +178,12 @@
     .tile.bounce { animation: tileBounce 0.6s ease forwards; }
     @keyframes tileBounce {
       0%   { transform: translateY(0); }
-      40%  { transform: translateY(-20px); }
-      60%  { transform: translateY(-10px); }
-      80%  { transform: translateY(-16px); }
+      40%  { transform: translateY(-18px); }
+      60%  { transform: translateY(-9px); }
+      80%  { transform: translateY(-14px); }
       100% { transform: translateY(0); }
     }
+
     .tile-inner {
       width: 100%;
       height: 100%;
@@ -167,178 +204,201 @@
       backface-visibility: hidden;
     }
     .tile-back { transform: rotateX(180deg); }
+
     .tile.correct .tile-inner { background: var(--green); }
     .tile.present .tile-inner { background: var(--yellow); }
     .tile.absent  .tile-inner { background: var(--gray); }
     .tile.correct { border-color: var(--green); }
     .tile.present { border-color: var(--yellow); }
     .tile.absent  { border-color: var(--gray); }
+
     #keyboard {
       width: 100%;
       max-width: 500px;
-      padding: 0 8px 24px;
+      padding: 0 8px 28px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 7px;
+      position: relative;
+      z-index: 1;
     }
     .kb-row {
       display: flex;
       justify-content: center;
-      gap: 6px;
+      gap: 5px;
     }
     .key {
-      height: 58px;
-      min-width: 43px;
-      border-radius: 4px;
+      height: 54px;
+      min-width: 40px;
+      border-radius: 2px;
       background: var(--key-bg);
       color: var(--key-text);
       font-family: var(--font-body);
-      font-size: 0.82rem;
-      font-weight: 700;
+      font-size: 0.72rem;
+      font-weight: 500;
       text-transform: uppercase;
-      border: none;
+      border: 1px solid #232328;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 6px;
-      letter-spacing: 0.02em;
+      padding: 0 5px;
+      letter-spacing: 0.05em;
       transition: background 0.2s, color 0.2s, transform 0.08s;
       flex: 1;
-      max-width: 43px;
+      max-width: 40px;
       user-select: none;
     }
-    .key.wide { max-width: 65px; font-size: 0.72rem; }
-    .key:active { transform: scale(0.94); }
-    .key.correct { background: var(--green); }
-    .key.present { background: var(--yellow); }
-    .key.absent  { background: var(--gray); }
+    .key.wide { max-width: 62px; font-size: 0.62rem; letter-spacing: 0.08em; }
+    .key:active { transform: scale(0.93); }
+    .key.correct { background: var(--green); border-color: var(--green); color: #fff; }
+    .key.present { background: var(--yellow); border-color: var(--yellow); color: #fff; }
+    .key.absent  { background: #1a1a1e; border-color: #1a1a1e; color: #3a3a40; }
+
+    /* Modal */
     #modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.75);
+      background: rgba(0,0,0,0.85);
       z-index: 300;
       align-items: center;
       justify-content: center;
+      backdrop-filter: blur(4px);
     }
     #modal-overlay.visible { display: flex; }
+
     #modal {
       background: var(--modal-bg);
-      border: 1px solid #3a3a3c;
-      border-radius: 12px;
-      padding: 40px 36px;
-      max-width: 420px;
-      width: 90%;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 48px 40px 40px;
+      max-width: 440px;
+      width: 92%;
       text-align: center;
       position: relative;
-      animation: modalSlideIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+      animation: modalSlideIn 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
     }
     @keyframes modalSlideIn {
-      from { opacity: 0; transform: translateY(30px) scale(0.95); }
-      to   { opacity: 1; transform: translateY(0)   scale(1); }
+      from { opacity: 0; transform: translateY(28px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
     }
-    #modal .tag {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
+
+    .modal-number {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 20px;
+      margin-bottom: 28px;
       display: block;
     }
-    #modal h2 {
+
+    .modal-label {
       font-family: var(--font-display);
       font-style: italic;
-      font-size: 1.1rem;
-      font-weight: 400;
+      font-size: 0.95rem;
       color: var(--text-muted);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+      display: block;
       letter-spacing: 0.02em;
     }
-    #modal .word-reveal {
+
+    .word-reveal {
       font-family: var(--font-body);
-      font-weight: 700;
-      font-size: 1.8rem;
-      letter-spacing: 0.18em;
-      color: var(--green);
-      margin-bottom: 24px;
+      font-weight: 500;
+      font-size: 1.5rem;
+      letter-spacing: 0.35em;
+      color: var(--accent);
+      margin-bottom: 32px;
       text-transform: uppercase;
     }
-    #modal .divider {
-      width: 40px;
+
+    .modal-rule {
+      width: 32px;
       height: 1px;
-      background: var(--border);
-      margin: 0 auto 24px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 auto 28px;
     }
+
     #modal p {
       font-family: var(--font-display);
       font-style: italic;
-      font-size: 1.05rem;
-      line-height: 1.75;
-      color: #d4d4d4;
-      margin-bottom: 32px;
+      font-size: 1.08rem;
+      line-height: 1.85;
+      color: #c8c2b8;
+      margin-bottom: 36px;
+      padding: 0 4px;
     }
+
     #continue-btn {
-      background: var(--text);
-      color: var(--bg);
-      border: none;
-      padding: 14px 36px;
-      border-radius: 6px;
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 12px 36px;
+      border-radius: 2px;
       font-family: var(--font-body);
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
+      transition: background 0.2s, color 0.2s, transform 0.1s;
     }
-    #continue-btn:hover { background: #e0e0e0; }
+    #continue-btn:hover { background: var(--accent); color: var(--bg); }
     #continue-btn:active { transform: scale(0.97); }
+
     @media (max-width: 520px) {
       :root { --tile-size: 36px; --gap: 4px; }
-      .tile { font-size: 1rem; }
-      .key { height: 46px; min-width: 30px; max-width: 30px; font-size: 0.65rem; }
-      .key.wide { max-width: 48px; font-size: 0.58rem; }
+      .tile { font-size: 0.9rem; }
+      .key { height: 44px; min-width: 28px; max-width: 28px; font-size: 0.58rem; }
+      .key.wide { max-width: 46px; font-size: 0.52rem; }
+      #modal { padding: 36px 24px 30px; }
+      #modal p { font-size: 0.98rem; }
     }
   </style>
 </head>
 <body>
 <header>
+  <span class="header-left">No. 16</span>
   <h1>Daily Word</h1>
   <button id="hint-btn">Hint</button>
 </header>
+
 <div id="toast-container"></div>
+
 <div id="board-container">
   <div id="board"></div>
 </div>
+
 <div id="keyboard">
   <div class="kb-row" id="kb-row-1"></div>
   <div class="kb-row" id="kb-row-2"></div>
   <div class="kb-row" id="kb-row-3"></div>
 </div>
+
 <div id="modal-overlay">
   <div id="modal">
-    <span class="tag">Thing I love about you</span>
-    <h2>Today's word was</h2>
-    <div class="word-reveal">ATTENTIVE</div>
-    <div class="divider"></div>
-    <p>I feel so cared for and loved, especially when you watched MoFy and B99 for me. You make my heart feel so warm when you remember stuff, and go out of your way to do things like that for me.</p>
+    <span class="modal-number">Thing I love about you · No. 16</span>
+    <span class="modal-label">Today's word was</span>
+    <div class="word-reveal">AUTHENTIC</div>
+    <div class="modal-rule"></div>
+    <p>I love that you show up as your most authentic self everywhere, no matter what. You have been the same since I have met you, and I love that I will be with that person forever.</p>
     <button id="continue-btn">Continue ♡</button>
   </div>
 </div>
+
 <script>
-  const WORD        = 'ATTENTIVE';
+  const WORD        = 'AUTHENTIC';
   const WORD_LENGTH = WORD.length;
   const MAX_GUESSES = 9;
-  const HINT_TEXT   = "Let's be honest, you started liking BTS for me… you really notice the little things, don't you?";
+  const HINT_TEXT   = 'This is constant. This is real. Muah.';
 
   let currentRow   = 0;
   let currentCol   = 0;
   let currentGuess = [];
   let gameOver     = false;
 
+  // Build board
   const board = document.getElementById('board');
   for (let r = 0; r < MAX_GUESSES; r++) {
     const row = document.createElement('div');
@@ -362,6 +422,7 @@
     board.appendChild(row);
   }
 
+  // Build keyboard
   const KB_ROWS = [
     ['Q','W','E','R','T','Y','U','I','O','P'],
     ['A','S','D','F','G','H','J','K','L'],
@@ -470,7 +531,7 @@
   }
 
   function revealRow(row, guess, result, callback) {
-    const DELAY = 250;
+    const DELAY = 240;
     for (let c = 0; c < WORD_LENGTH; c++) {
       const tile  = getTile(row, c);
       const inner = tile.querySelector('.tile-inner');
