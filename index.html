@@ -1,612 +1,734 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daily Word #12</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,700;1,400;1,600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #0e0e10;
-      --surface: #17171a;
-      --border: #2e2e33;
-      --text: #f0ece4;
-      --text-muted: #6b6870;
-      --green: #4e8c6a;
-      --yellow: #b59a3b;
-      --gray: #2e2e33;
-      --key-bg: #2a2a30;
-      --key-text: #c8c4bc;
-      --tile-size: 44px;
-      --gap: 5px;
-      --font-body: 'DM Mono', 'Courier New', monospace;
-      --font-display: 'Cormorant Garamond', Georgia, serif;
-      --modal-bg: #131316;
-      --accent: #c4a882;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Your Adventure ♡</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-body);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+:root{
+  --pink: #f4a7b9;
+  --pink-light: #fce4ec;
+  --pink-deep: #e8789a;
+  --lilac: #d4b8e0;
+  --lilac-light: #f3eaf9;
+  --peach: #ffcba4;
+  --peach-light: #fff3ea;
+  --mint: #b8ddd4;
+  --mint-light: #e8f8f5;
+  --yellow: #ffe082;
+  --yellow-light: #fffde7;
+  --cream: #fef9f4;
+  --text: #5a3e4b;
+  --text-muted: #9e7a88;
+  --white: #ffffff;
+  --radius: 20px;
+  --radius-lg: 28px;
+}
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
-    }
+body{
+  background: linear-gradient(160deg, #fce4ec 0%, #f3eaf9 40%, #e8f8f5 100%);
+  min-height: 100vh;
+  font-family: 'Quicksand', sans-serif;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+}
 
-    header {
-      width: 100%;
-      max-width: 620px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 18px 16px 14px;
-      border-bottom: 1px solid var(--border);
-      position: relative;
-      z-index: 1;
-    }
+/* ── Header ── */
+.header{
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+  padding: 32px 20px 16px;
+}
+.header-sub{
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.header h1{
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+.header h1 span{
+  font-style: italic;
+  color: var(--pink-deep);
+}
+.progress-bar-wrap{
+  background: rgba(244,167,185,0.25);
+  border-radius: 99px;
+  height: 6px;
+  margin: 18px auto 0;
+  max-width: 200px;
+  overflow: hidden;
+}
+.progress-bar{
+  height: 100%;
+  background: linear-gradient(90deg, var(--pink), var(--lilac));
+  border-radius: 99px;
+  transition: width 0.8s cubic-bezier(.34,1.56,.64,1);
+}
 
-    .header-left {
-      position: absolute;
-      left: 16px;
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
+/* ── Game Map ── */
+.map-container{
+  width: 100%;
+  max-width: 480px;
+  padding: 8px 20px 120px;
+  position: relative;
+}
 
-    header h1 {
-      font-family: var(--font-body);
-      font-weight: 500;
-      font-size: 0.85rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--text);
-    }
+/* dotted path line */
+.path-line{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  top: 0;
+  bottom: 80px;
+  z-index: 0;
+  overflow: visible;
+}
+.path-line svg{
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
 
-    #hint-btn {
-      position: absolute;
-      right: 16px;
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 0.6rem;
-      font-family: var(--font-body);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 5px 10px;
-      border-radius: 2px;
-      cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
-    }
-    #hint-btn:hover { color: var(--accent); border-color: var(--accent); }
+/* ── Stop Card ── */
+.stop{
+  position: relative;
+  z-index: 1;
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    #toast-container {
-      position: fixed;
-      top: 70px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 200;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      pointer-events: none;
-    }
+.stop-pin{
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 4px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s;
+  box-shadow: 0 4px 16px rgba(244,167,185,0.35);
+  position: relative;
+  z-index: 2;
+}
+.stop-pin.locked{
+  background: #f0e6ef;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.stop-pin.active{
+  background: linear-gradient(135deg, var(--pink-light), var(--lilac-light));
+  animation: pulse-pin 2s ease-in-out infinite;
+}
+.stop-pin.done{
+  background: linear-gradient(135deg, var(--mint-light), #c8f5ed);
+  animation: none;
+  transform: scale(1.08);
+}
 
-    .toast {
-      background: var(--text);
-      color: var(--bg);
-      padding: 10px 18px;
-      border-radius: 2px;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-align: center;
-      max-width: 380px;
-      font-family: var(--font-body);
-      opacity: 1;
-      transition: opacity 0.3s ease;
-      animation: toastIn 0.2s ease;
-    }
-    @keyframes toastIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse-pin{
+  0%,100%{box-shadow: 0 4px 16px rgba(244,167,185,0.4), 0 0 0 0 rgba(244,167,185,0.4);}
+  50%{box-shadow: 0 4px 20px rgba(244,167,185,0.5), 0 0 0 10px rgba(244,167,185,0);}
+}
 
-    #board-container {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px 0 10px;
-      position: relative;
-      z-index: 1;
-    }
+.stop-card{
+  width: 100%;
+  border-radius: var(--radius-lg);
+  padding: 22px 22px 18px;
+  border: 2px solid transparent;
+  transition: all 0.5s ease;
+}
+.stop-card.locked{
+  background: rgba(255,255,255,0.45);
+  border-color: rgba(255,255,255,0.6);
+  filter: blur(0px);
+}
+.stop-card.active{
+  background: var(--white);
+  border-color: var(--pink-light);
+  box-shadow: 0 8px 32px rgba(244,167,185,0.2);
+}
+.stop-card.done{
+  background: linear-gradient(135deg, #f0fdf8, #e8f8f5);
+  border-color: var(--mint);
+}
 
-    #board {
-      display: flex;
-      flex-direction: column;
-      gap: var(--gap);
-    }
+.stop-label{
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.stop-name{
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.stop-name.locked-text{color: #c9b8c2;}
 
-    .row {
-      display: flex;
-      flex-direction: row;
-      gap: var(--gap);
-    }
+.divider{
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(244,167,185,0.4), transparent);
+  margin: 12px 0;
+}
+.divider.mint{background: linear-gradient(90deg, transparent, rgba(184,221,212,0.5), transparent);}
 
-    .tile {
-      width: var(--tile-size);
-      height: var(--tile-size);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      user-select: none;
-      position: relative;
-      perspective: 250px;
-    }
-    .tile[data-letter] { border-color: #4a4a52; }
-    .tile.pop { animation: tilePop 0.1s ease; }
-    @keyframes tilePop {
-      0%   { transform: scale(1); }
-      50%  { transform: scale(1.08); }
-      100% { transform: scale(1); }
-    }
-    .row.shake { animation: rowShake 0.5s ease; }
-    @keyframes rowShake {
-      0%, 100% { transform: translateX(0); }
-      10%, 50%, 90% { transform: translateX(-4px); }
-      30%, 70% { transform: translateX(4px); }
-    }
-    .tile.bounce { animation: tileBounce 0.6s ease forwards; }
-    @keyframes tileBounce {
-      0%   { transform: translateY(0); }
-      40%  { transform: translateY(-18px); }
-      60%  { transform: translateY(-9px); }
-      80%  { transform: translateY(-14px); }
-      100% { transform: translateY(0); }
-    }
+.clue-label{
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pink-deep);
+  margin-bottom: 6px;
+}
+.clue-text{
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text);
+}
+.clue-text.locked-clue{
+  color: #c9b8c2;
+  font-style: italic;
+  font-size: 0.85rem;
+}
 
-    .tile-inner {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transform-style: preserve-3d;
-      transition: transform 0.5s ease;
-      position: relative;
-    }
-    .tile-front, .tile-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      backface-visibility: hidden;
-    }
-    .tile-back { transform: rotateX(180deg); }
+.done-badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--mint-light);
+  color: #2e7d6a;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 99px;
+  border: 1.5px solid var(--mint);
+  margin-top: 10px;
+}
 
-    .tile.correct .tile-inner { background: var(--green); }
-    .tile.present .tile-inner { background: var(--yellow); }
-    .tile.absent  .tile-inner { background: var(--gray); }
-    .tile.correct { border-color: var(--green); }
-    .tile.present { border-color: var(--yellow); }
-    .tile.absent  { border-color: var(--gray); }
+/* ── "I'm Here" Button ── */
+.here-btn{
+  width: 100%;
+  margin-top: 14px;
+  background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+  color: white;
+  border: none;
+  border-radius: 99px;
+  padding: 16px 24px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s;
+  box-shadow: 0 6px 20px rgba(232,120,154,0.4);
+}
+.here-btn:hover{transform: translateY(-2px); box-shadow: 0 10px 28px rgba(232,120,154,0.45);}
+.here-btn:active{transform: scale(0.97);}
 
-    #keyboard {
-      width: 100%;
-      max-width: 520px;
-      padding: 0 8px 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      position: relative;
-      z-index: 1;
-    }
-    .kb-row {
-      display: flex;
-      justify-content: center;
-      gap: 5px;
-    }
-    .key {
-      height: 54px;
-      min-width: 38px;
-      border-radius: 2px;
-      background: var(--key-bg);
-      color: var(--key-text);
-      font-family: var(--font-body);
-      font-size: 0.72rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      border: 1px solid #232328;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 5px;
-      letter-spacing: 0.05em;
-      transition: background 0.2s, color 0.2s, transform 0.08s;
-      flex: 1;
-      max-width: 38px;
-      user-select: none;
-    }
-    .key.wide { max-width: 60px; font-size: 0.62rem; letter-spacing: 0.08em; }
-    .key:active { transform: scale(0.93); }
-    .key.correct { background: var(--green); border-color: var(--green); color: #fff; }
-    .key.present { background: var(--yellow); border-color: var(--yellow); color: #fff; }
-    .key.absent  { background: #1a1a1e; border-color: #1a1a1e; color: #3a3a40; }
+/* avatar on path */
+.avatar{
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink), var(--lilac));
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(232,120,154,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  transition: top 1s cubic-bezier(.34,1.2,.64,1);
+}
 
-    /* Modal */
-    #modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      z-index: 300;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(4px);
-    }
-    #modal-overlay.visible { display: flex; }
+/* ── Confetti overlay ── */
+#confetti-canvas{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
 
-    #modal {
-      background: var(--modal-bg);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 48px 40px 40px;
-      max-width: 440px;
-      width: 92%;
-      text-align: center;
-      position: relative;
-      animation: modalSlideIn 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
-    }
-    @keyframes modalSlideIn {
-      from { opacity: 0; transform: translateY(28px) scale(0.96); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
-    }
+/* ── Final Modal ── */
+.modal-overlay{
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(90,62,75,0.6);
+  backdrop-filter: blur(8px);
+  z-index: 9998;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.modal-overlay.show{display: flex;}
+.modal{
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 36px 28px 30px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: modalIn 0.6s cubic-bezier(.34,1.4,.64,1) forwards;
+}
+@keyframes modalIn{
+  from{opacity:0; transform: scale(0.8) translateY(30px);}
+  to{opacity:1; transform: scale(1) translateY(0);}
+}
+.modal-hearts{
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+  animation: heartbeat 1.4s ease-in-out infinite;
+}
+@keyframes heartbeat{
+  0%,100%{transform: scale(1);}
+  50%{transform: scale(1.12);}
+}
+.modal h2{
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.modal-sub{
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.photo-placeholder{
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--pink-light), var(--lilac-light));
+  border: 2px dashed var(--pink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.photo-placeholder .ph-icon{font-size: 2.4rem;}
+.photo-placeholder .ph-text{
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.modal-message{
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text);
+  margin-bottom: 24px;
+  font-style: italic;
+}
+.modal-close-btn{
+  background: linear-gradient(135deg, var(--pink), var(--lilac));
+  color: white;
+  border: none;
+  border-radius: 99px;
+  padding: 14px 32px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(212,184,224,0.5);
+  transition: transform 0.15s;
+}
+.modal-close-btn:active{transform: scale(0.97);}
 
-    .modal-number {
-      font-size: 0.6rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 28px;
-      display: block;
-    }
+/* ── Success toast for each step ── */
+.step-toast{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%) scale(0.7);
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 24px 32px;
+  text-align: center;
+  z-index: 9997;
+  box-shadow: 0 24px 60px rgba(244,167,185,0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(.34,1.4,.64,1);
+  max-width: 280px;
+  width: 85%;
+}
+.step-toast.show{
+  opacity: 1;
+  transform: translate(-50%,-50%) scale(1);
+}
+.step-toast-emoji{font-size: 2.5rem; margin-bottom: 6px;}
+.step-toast-title{
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.step-toast-sub{
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
 
-    .modal-label {
-      font-family: var(--font-display);
-      font-style: italic;
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      display: block;
-      letter-spacing: 0.02em;
-    }
+/* entrance animation for newly unlocked card */
+@keyframes cardReveal{
+  from{opacity:0; transform: translateY(24px) scale(0.95);}
+  to{opacity:1; transform: translateY(0) scale(1);}
+}
+.card-reveal{animation: cardReveal 0.6s cubic-bezier(.34,1.3,.64,1) forwards;}
 
-    .word-reveal {
-      font-family: var(--font-body);
-      font-weight: 500;
-      font-size: 1.3rem;
-      letter-spacing: 0.25em;
-      color: var(--accent);
-      margin-bottom: 32px;
-      text-transform: uppercase;
-    }
+/* sparkle particles */
+.sparkle{
+  position: fixed;
+  pointer-events: none;
+  z-index: 9996;
+  font-size: 1.2rem;
+  animation: sparkleFly 1.2s ease forwards;
+}
+@keyframes sparkleFly{
+  0%{opacity:1; transform: translateY(0) scale(1);}
+  100%{opacity:0; transform: translateY(-120px) scale(0.3);}
+}
 
-    .modal-rule {
-      width: 32px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border), transparent);
-      margin: 0 auto 28px;
-    }
-
-    #modal p {
-      font-family: var(--font-display);
-      font-style: italic;
-      font-size: 1.08rem;
-      line-height: 1.85;
-      color: #c8c2b8;
-      margin-bottom: 36px;
-      padding: 0 4px;
-    }
-
-    #continue-btn {
-      background: transparent;
-      color: var(--accent);
-      border: 1px solid var(--accent);
-      padding: 12px 36px;
-      border-radius: 2px;
-      font-family: var(--font-body);
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, transform 0.1s;
-    }
-    #continue-btn:hover { background: var(--accent); color: var(--bg); }
-    #continue-btn:active { transform: scale(0.97); }
-
-    @media (max-width: 520px) {
-      :root { --tile-size: 30px; --gap: 4px; }
-      .tile { font-size: 0.78rem; }
-      .key { height: 44px; min-width: 26px; max-width: 26px; font-size: 0.55rem; }
-      .key.wide { max-width: 44px; font-size: 0.5rem; }
-      #modal { padding: 36px 24px 30px; }
-      #modal p { font-size: 0.98rem; }
-      .word-reveal { font-size: 1rem; letter-spacing: 0.15em; }
-    }
-  </style>
+@media(max-width:380px){
+  .header h1{font-size:1.6rem;}
+  .stop-name{font-size:1.1rem;}
+  .here-btn{font-size:0.9rem; padding:14px;}
+}
+</style>
 </head>
 <body>
-<header>
-  <span class="header-left">No. 12</span>
-  <h1>Daily Word</h1>
-  <button id="hint-btn">Hint</button>
-</header>
 
-<div id="toast-container"></div>
+<canvas id="confetti-canvas"></canvas>
 
-<div id="board-container">
-  <div id="board"></div>
+<div class="header">
+  <div class="header-sub">A special adventure for you ♡</div>
+  <h1>Your <span>Indiranagar</span><br/>Treasure Hunt</h1>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+  </div>
 </div>
 
-<div id="keyboard">
-  <div class="kb-row" id="kb-row-1"></div>
-  <div class="kb-row" id="kb-row-2"></div>
-  <div class="kb-row" id="kb-row-3"></div>
+<div class="map-container" id="map">
+
+  <!-- Stop 1 -->
+  <div class="stop" id="stop-0">
+    <div class="stop-pin active" id="pin-0">⛳</div>
+    <div class="stop-card active" id="card-0">
+      <div class="stop-label">Starting Point · Stop 1 of 4</div>
+      <div class="stop-name">Mini Golf Madness</div>
+      <div class="divider"></div>
+      <div class="clue-label">Your Next Clue</div>
+      <div class="clue-text">Thanks for bringing me to finishing the most athletic thing we've done all month. Now, Level 1: Walk toward the 100ft intersection. Look for the place that charges people money to be locked in a room — because apparently, Indiranagar rent isn't enough of a trap.</div>
+      <button class="here-btn" onclick="completeStep(0)">I'm here! ✓</button>
+    </div>
+  </div>
+
+  <!-- Stop 2 -->
+  <div class="stop" id="stop-1">
+    <div class="stop-pin locked" id="pin-1">🔒</div>
+    <div class="stop-card locked" id="card-1">
+      <div class="stop-label">Stop 2 of 4</div>
+      <div class="stop-name locked-text">Mystery Rooms</div>
+      <div class="divider"></div>
+      <div class="clue-text locked-clue">Unlock by completing Stop 1 ♡</div>
+    </div>
+  </div>
+
+  <!-- Stop 3 -->
+  <div class="stop" id="stop-2">
+    <div class="stop-pin locked" id="pin-2">🔒</div>
+    <div class="stop-card locked" id="card-2">
+      <div class="stop-label">Stop 3 of 4</div>
+      <div class="stop-name locked-text">Theobroma</div>
+      <div class="divider"></div>
+      <div class="clue-text locked-clue">Unlock by completing Stop 2 ♡</div>
+    </div>
+  </div>
+
+  <!-- Stop 4 -->
+  <div class="stop" id="stop-3">
+    <div class="stop-pin locked" id="pin-3">🔒</div>
+    <div class="stop-card locked" id="card-3">
+      <div class="stop-label">Final Destination · Stop 4 of 4</div>
+      <div class="stop-name locked-text">Balaji Flowers</div>
+      <div class="divider"></div>
+      <div class="clue-text locked-clue">Unlock by completing Stop 3 ♡</div>
+    </div>
+  </div>
+
 </div>
 
-<div id="modal-overlay">
-  <div id="modal">
-    <span class="modal-number">Thing I love about you · No. 12</span>
-    <span class="modal-label">Today's word was</span>
-    <div class="word-reveal">COMPETITIVE</div>
-    <div class="modal-rule"></div>
-    <p>This is actually one of my favorite things about you, and even though I don't admit it. Not with me though, never with me ok dear. Muah.</p>
-    <button id="continue-btn">Continue ♡</button>
+<!-- Success toast -->
+<div class="step-toast" id="step-toast">
+  <div class="step-toast-emoji" id="toast-emoji">🎉</div>
+  <div class="step-toast-title" id="toast-title">Yay!</div>
+  <div class="step-toast-sub" id="toast-sub">Next clue unlocked</div>
+</div>
+
+<!-- Final modal -->
+<div class="modal-overlay" id="final-modal">
+  <div class="modal">
+    <div class="modal-hearts">💖</div>
+    <h2>You made it!</h2>
+    <div class="modal-sub">Adventure Complete · All 4 stops</div>
+    <div class="photo-placeholder">
+      <div class="ph-icon">📸</div>
+      <div class="ph-text">Your photo here</div>
+    </div>
+    <div class="modal-message">
+      I have something sparkly and something colorful for you! Look up! ❤️<br/><br/>
+      You are my favorite adventure — always.
+    </div>
+    <button class="modal-close-btn" onclick="document.getElementById('final-modal').classList.remove('show')">Love you ♡</button>
   </div>
 </div>
 
 <script>
-  const WORD        = 'COMPETITIVE';
-  const WORD_LENGTH = WORD.length;
-  const MAX_GUESSES = 9;
-  const HINT_TEXT   = 'Hmm this might be debatable, but I actually like this about you ; )';
-
-  let currentRow   = 0;
-  let currentCol   = 0;
-  let currentGuess = [];
-  let gameOver     = false;
-
-  // Build board
-  const board = document.getElementById('board');
-  for (let r = 0; r < MAX_GUESSES; r++) {
-    const row = document.createElement('div');
-    row.classList.add('row');
-    row.id = `row-${r}`;
-    for (let c = 0; c < WORD_LENGTH; c++) {
-      const tile = document.createElement('div');
-      tile.classList.add('tile');
-      tile.id = `tile-${r}-${c}`;
-      const inner = document.createElement('div');
-      inner.classList.add('tile-inner');
-      const front = document.createElement('div');
-      front.classList.add('tile-front');
-      const back = document.createElement('div');
-      back.classList.add('tile-back');
-      inner.appendChild(front);
-      inner.appendChild(back);
-      tile.appendChild(inner);
-      row.appendChild(tile);
-    }
-    board.appendChild(row);
+const steps = [
+  {
+    emoji: '⛳',
+    name: 'Mini Golf Madness',
+    label: 'Starting Point · Stop 1 of 4',
+    clueLabel: 'Your Next Clue',
+    clue: 'Thanks for bringing me to finishing the most athletic thing we\'ve done all month. Now, Level 1: Walk toward the 100ft intersection. Look for the place that charges people money to be locked in a room — because apparently, Indiranagar rent isn\'t enough of a trap.',
+    toastEmoji: '🎊',
+    toastTitle: 'Stop 1 done!',
+    toastSub: 'Mystery Rooms unlocked ♡'
+  },
+  {
+    emoji: '🔐',
+    name: 'Mystery Rooms',
+    label: 'Stop 2 of 4',
+    clueLabel: 'Your Next Clue',
+    clue: 'No escapes today — just a sweet journey! Cross the 100ft road and keep going straight until you find a bakery for a treat.',
+    toastEmoji: '🍰',
+    toastTitle: 'Stop 2 done!',
+    toastSub: 'Theobroma unlocked ♡'
+  },
+  {
+    emoji: '🧁',
+    name: 'Theobroma',
+    label: 'Stop 3 of 4',
+    clueLabel: 'Your Next Clue',
+    clue: 'Follow the path to the very end of 12th Main, where the 80ft breeze meets the junction.',
+    toastEmoji: '✨',
+    toastTitle: 'Stop 3 done!',
+    toastSub: 'Final destination unlocked ♡'
+  },
+  {
+    emoji: '🌸',
+    name: 'Balaji Flowers',
+    label: 'Final Destination · Stop 4 of 4',
+    clueLabel: 'You\'re here!',
+    clue: 'I have something sparkly and something colorful for you! Look up! ❤️',
+    toastEmoji: '💖',
+    toastTitle: 'You did it!',
+    toastSub: 'Adventure complete! ♡',
+    isFinal: true
   }
+];
 
-  // Build keyboard
-  const KB_ROWS = [
-    ['Q','W','E','R','T','Y','U','I','O','P'],
-    ['A','S','D','F','G','H','J','K','L'],
-    ['ENTER','Z','X','C','V','B','N','M','⌫']
-  ];
-  KB_ROWS.forEach((keys, i) => {
-    const rowEl = document.getElementById(`kb-row-${i + 1}`);
-    keys.forEach(k => {
-      const btn = document.createElement('button');
-      btn.classList.add('key');
-      btn.textContent = k;
-      btn.dataset.key = k;
-      if (k === 'ENTER' || k === '⌫') btn.classList.add('wide');
-      btn.addEventListener('click', () => handleKey(k));
-      rowEl.appendChild(btn);
-    });
-  });
+let current = 0;
 
-  document.addEventListener('keydown', e => {
-    if (gameOver) return;
-    if (e.key === 'Enter') handleKey('ENTER');
-    else if (e.key === 'Backspace') handleKey('⌫');
-    else if (/^[a-zA-Z]$/.test(e.key)) handleKey(e.key.toUpperCase());
-  });
+function completeStep(idx){
+  if(idx !== current) return;
+  const step = steps[idx];
 
-  function handleKey(key) {
-    if (gameOver) return;
-    if (key === '⌫') deleteLetter();
-    else if (key === 'ENTER') submitGuess();
-    else if (/^[A-Z]$/.test(key)) addLetter(key);
-  }
+  // Show sparkles from button
+  spawnSparkles();
 
-  function addLetter(letter) {
-    if (currentCol >= WORD_LENGTH) return;
-    currentGuess.push(letter);
-    const tile = getTile(currentRow, currentCol);
-    tile.querySelector('.tile-front').textContent = letter;
-    tile.querySelector('.tile-back').textContent  = letter;
-    tile.dataset.letter = letter;
-    tile.classList.remove('pop');
-    void tile.offsetWidth;
-    tile.classList.add('pop');
-    currentCol++;
-  }
+  // Mark current as done
+  const pin = document.getElementById(`pin-${idx}`);
+  const card = document.getElementById(`card-${idx}`);
+  pin.className = 'stop-pin done';
+  pin.textContent = '✓';
+  card.className = 'stop-card done';
+  card.innerHTML = `
+    <div class="stop-label">${step.label}</div>
+    <div class="stop-name">${step.name}</div>
+    <div class="divider mint"></div>
+    <div class="done-badge">✓ Completed!</div>
+  `;
 
-  function deleteLetter() {
-    if (currentCol <= 0) return;
-    currentCol--;
-    currentGuess.pop();
-    const tile = getTile(currentRow, currentCol);
-    tile.querySelector('.tile-front').textContent = '';
-    tile.querySelector('.tile-back').textContent  = '';
-    delete tile.dataset.letter;
-  }
+  current++;
+  const pct = (current / steps.length) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
 
-  function submitGuess() {
-    if (currentCol < WORD_LENGTH) {
-      showToast('Not enough letters');
-      shakeRow(currentRow);
+  // Show toast
+  const toast = document.getElementById('step-toast');
+  document.getElementById('toast-emoji').textContent = step.toastEmoji;
+  document.getElementById('toast-title').textContent = step.toastTitle;
+  document.getElementById('toast-sub').textContent = step.toastSub;
+  toast.classList.add('show');
+
+  // Confetti burst
+  confettiBurst(step.isFinal ? 200 : 80, step.isFinal);
+
+  setTimeout(()=>{
+    toast.classList.remove('show');
+
+    if(step.isFinal){
+      setTimeout(()=> document.getElementById('final-modal').classList.add('show'), 400);
       return;
     }
-    const guess  = currentGuess.join('');
-    const result = evaluate(guess);
-    revealRow(currentRow, guess, result, () => {
-      updateKeyboard(guess, result);
-      if (guess === WORD) {
-        bounceRow(currentRow);
-        gameOver = true;
-        setTimeout(showModal, 1400);
-      } else {
-        currentRow++;
-        currentCol   = 0;
-        currentGuess = [];
-        if (currentRow >= MAX_GUESSES) {
-          gameOver = true;
-          setTimeout(() => showToast(WORD, 4000), 400);
-        }
-      }
+
+    // Unlock next
+    unlockNext(current);
+  }, 1800);
+}
+
+function unlockNext(idx){
+  const step = steps[idx];
+  const pin = document.getElementById(`pin-${idx}`);
+  const card = document.getElementById(`card-${idx}`);
+
+  pin.className = 'stop-pin active';
+  pin.textContent = step.emoji;
+
+  card.className = 'stop-card active card-reveal';
+  card.innerHTML = `
+    <div class="stop-label">${step.label}</div>
+    <div class="stop-name">${step.name}</div>
+    <div class="divider"></div>
+    <div class="clue-label">${step.clueLabel}</div>
+    <div class="clue-text">${step.clue}</div>
+    ${step.isFinal
+      ? `<button class="here-btn" style="background:linear-gradient(135deg,#b8ddd4,#6dbfaa);box-shadow:0 6px 20px rgba(109,191,170,0.4)" onclick="completeStep(${idx})">I found it! 🌸</button>`
+      : `<button class="here-btn" onclick="completeStep(${idx})">I'm here! ✓</button>`
+    }
+  `;
+
+  // Scroll to newly unlocked card
+  setTimeout(()=>{
+    card.scrollIntoView({behavior:'smooth', block:'center'});
+  }, 300);
+}
+
+/* ── Confetti ── */
+const canvas = document.getElementById('confetti-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let animId = null;
+
+function resizeCanvas(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+const COLORS = ['#f4a7b9','#d4b8e0','#ffcba4','#b8ddd4','#ffe082','#e8789a','#a8d5e2','#f9c6d0'];
+const SHAPES = ['circle','rect','heart'];
+
+function confettiBurst(count, isHeart){
+  particles = [];
+  const cx = canvas.width / 2;
+  for(let i=0;i<count;i++){
+    particles.push({
+      x: cx + (Math.random()-0.5)*200,
+      y: canvas.height * 0.35,
+      vx: (Math.random()-0.5)*8,
+      vy: -Math.random()*14 - 4,
+      size: Math.random()*8+4,
+      color: COLORS[Math.floor(Math.random()*COLORS.length)],
+      shape: isHeart ? 'heart' : SHAPES[Math.floor(Math.random()*SHAPES.length)],
+      rot: Math.random()*Math.PI*2,
+      rotV: (Math.random()-0.5)*0.2,
+      alpha: 1,
+      gravity: 0.35
     });
   }
+  if(animId) cancelAnimationFrame(animId);
+  drawParticles();
+}
 
-  function evaluate(guess) {
-    const result    = Array(WORD_LENGTH).fill('absent');
-    const wordArr   = WORD.split('');
-    const guessArr  = guess.split('');
-    const wordUsed  = Array(WORD_LENGTH).fill(false);
-    const guessUsed = Array(WORD_LENGTH).fill(false);
-    for (let i = 0; i < WORD_LENGTH; i++) {
-      if (guessArr[i] === wordArr[i]) {
-        result[i]    = 'correct';
-        wordUsed[i]  = true;
-        guessUsed[i] = true;
-      }
+function drawParticles(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  let alive = false;
+  for(const p of particles){
+    if(p.alpha<=0) continue;
+    alive = true;
+    ctx.save();
+    ctx.globalAlpha = p.alpha;
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+    ctx.fillStyle = p.color;
+    if(p.shape==='circle'){
+      ctx.beginPath();
+      ctx.arc(0,0,p.size/2,0,Math.PI*2);
+      ctx.fill();
+    } else if(p.shape==='rect'){
+      ctx.fillRect(-p.size/2,-p.size/4,p.size,p.size/2);
+    } else {
+      drawHeart(ctx, p.size*0.7);
     }
-    for (let i = 0; i < WORD_LENGTH; i++) {
-      if (guessUsed[i]) continue;
-      for (let j = 0; j < WORD_LENGTH; j++) {
-        if (!wordUsed[j] && guessArr[i] === wordArr[j]) {
-          result[i]   = 'present';
-          wordUsed[j] = true;
-          break;
-        }
-      }
-    }
-    return result;
+    ctx.restore();
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += p.gravity;
+    p.vx *= 0.99;
+    p.rot += p.rotV;
+    p.alpha -= 0.012;
   }
+  if(alive) animId = requestAnimationFrame(drawParticles);
+  else ctx.clearRect(0,0,canvas.width,canvas.height);
+}
 
-  function revealRow(row, guess, result, callback) {
-    const DELAY = 220;
-    for (let c = 0; c < WORD_LENGTH; c++) {
-      const tile  = getTile(row, c);
-      const inner = tile.querySelector('.tile-inner');
-      setTimeout(() => {
-        tile.classList.add(result[c]);
-        inner.style.transition = 'transform 0.5s ease';
-        inner.style.transform  = 'rotateX(360deg)';
-      }, c * DELAY);
-    }
-    setTimeout(callback, WORD_LENGTH * DELAY + 500);
+function drawHeart(ctx, s){
+  ctx.beginPath();
+  ctx.moveTo(0,-s*0.3);
+  ctx.bezierCurveTo(s*0.5,-s*0.8, s,-s*0.3, 0, s*0.4);
+  ctx.bezierCurveTo(-s,-s*0.3, -s*0.5,-s*0.8, 0,-s*0.3);
+  ctx.fill();
+}
+
+/* ── Sparkles ── */
+function spawnSparkles(){
+  const sparkles = ['✨','💫','⭐','🌟','💕'];
+  for(let i=0;i<8;i++){
+    const el = document.createElement('div');
+    el.className = 'sparkle';
+    el.textContent = sparkles[Math.floor(Math.random()*sparkles.length)];
+    el.style.left = (30 + Math.random()*40) + '%';
+    el.style.top = (40 + Math.random()*20) + '%';
+    el.style.animationDelay = (Math.random()*0.4) + 's';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 1400);
   }
-
-  function shakeRow(row) {
-    const rowEl = document.getElementById(`row-${row}`);
-    rowEl.classList.remove('shake');
-    void rowEl.offsetWidth;
-    rowEl.classList.add('shake');
-  }
-
-  function bounceRow(row) {
-    for (let c = 0; c < WORD_LENGTH; c++) {
-      setTimeout(() => getTile(row, c).classList.add('bounce'), c * 100);
-    }
-  }
-
-  const KEY_PRIORITY = { correct: 3, present: 2, absent: 1 };
-  function updateKeyboard(guess, result) {
-    for (let i = 0; i < WORD_LENGTH; i++) {
-      const letter = guess[i];
-      const state  = result[i];
-      const btn    = document.querySelector(`.key[data-key="${letter}"]`);
-      if (!btn) continue;
-      const current = btn.classList.contains('correct') ? 'correct'
-                    : btn.classList.contains('present') ? 'present'
-                    : btn.classList.contains('absent')  ? 'absent' : null;
-      if (!current || KEY_PRIORITY[state] > KEY_PRIORITY[current]) {
-        if (current) btn.classList.remove(current);
-        btn.classList.add(state);
-      }
-    }
-  }
-
-  function showToast(msg, duration = 2000) {
-    const container = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.classList.add('toast');
-    toast.textContent = msg;
-    container.appendChild(toast);
-    setTimeout(() => {
-      toast.style.opacity = '0';
-      setTimeout(() => toast.remove(), 300);
-    }, duration - 300);
-  }
-
-  function showModal() {
-    document.getElementById('modal-overlay').classList.add('visible');
-  }
-
-  document.getElementById('continue-btn').addEventListener('click', () => {
-    document.getElementById('modal-overlay').classList.remove('visible');
-  });
-
-  document.getElementById('modal-overlay').addEventListener('click', e => {
-    if (e.target === document.getElementById('modal-overlay')) {
-      document.getElementById('modal-overlay').classList.remove('visible');
-    }
-  });
-
-  document.getElementById('hint-btn').addEventListener('click', () => {
-    showToast(HINT_TEXT, 5000);
-  });
-
-  function getTile(row, col) {
-    return document.getElementById(`tile-${row}-${col}`);
-  }
+}
 </script>
 </body>
 </html>
