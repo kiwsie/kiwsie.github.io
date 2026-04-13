@@ -1,733 +1,587 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Your Adventure ♡</title>
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Crossword</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root{
-  --pink: #f4a7b9;
-  --pink-light: #fce4ec;
-  --pink-deep: #e8789a;
-  --lilac: #d4b8e0;
-  --lilac-light: #f3eaf9;
-  --peach: #ffcba4;
-  --peach-light: #fff3ea;
-  --mint: #b8ddd4;
-  --mint-light: #e8f8f5;
-  --yellow: #ffe082;
-  --yellow-light: #fffde7;
-  --cream: #fef9f4;
-  --text: #5a3e4b;
-  --text-muted: #9e7a88;
-  --white: #ffffff;
-  --radius: 20px;
-  --radius-lg: 28px;
-}
+  body {
+    background: #f3efe7;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem 1rem 4rem;
+    font-family: "Times New Roman", Times, serif;
+    color: #111;
+  }
 
-body{
-  background: linear-gradient(160deg, #fce4ec 0%, #f3eaf9 40%, #e8f8f5 100%);
-  min-height: 100vh;
-  font-family: 'Quicksand', sans-serif;
-  color: var(--text);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow-x: hidden;
-}
+  .page {
+    background: #fffdfa;
+    border: 1px solid #cfc7bb;
+    max-width: 780px;
+    width: 100%;
+    padding: 0;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+  }
 
-/* ── Header ── */
-.header{
-  width: 100%;
-  max-width: 480px;
-  text-align: center;
-  padding: 32px 20px 16px;
-}
-.header-sub{
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-.header h1{
-  font-family: 'Playfair Display', serif;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.2;
-}
-.header h1 span{
-  font-style: italic;
-  color: var(--pink-deep);
-}
-.progress-bar-wrap{
-  background: rgba(244,167,185,0.25);
-  border-radius: 99px;
-  height: 6px;
-  margin: 18px auto 0;
-  max-width: 200px;
-  overflow: hidden;
-}
-.progress-bar{
-  height: 100%;
-  background: linear-gradient(90deg, var(--pink), var(--lilac));
-  border-radius: 99px;
-  transition: width 0.8s cubic-bezier(.34,1.56,.64,1);
-}
+  .masthead {
+    border-bottom: 1px solid #111;
+    padding: 10px 24px 8px;
+    text-align: center;
+  }
 
-/* ── Game Map ── */
-.map-container{
-  width: 100%;
-  max-width: 480px;
-  padding: 8px 20px 120px;
-  position: relative;
-}
+  .masthead-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 6px;
+    font-family: 'Source Serif 4', serif;
+  }
 
-/* dotted path line */
-.path-line{
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 3px;
-  top: 0;
-  bottom: 80px;
-  z-index: 0;
-  overflow: visible;
-}
-.path-line svg{
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
+  .masthead-top span { min-width: 160px; }
+  .masthead-top span:last-child { text-align: right; }
 
-/* ── Stop Card ── */
-.stop{
-  position: relative;
-  z-index: 1;
-  margin-bottom: 32px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  .masthead-logo {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: #111;
+    line-height: 1;
+  }
 
-.stop-pin{
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 4px solid white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  margin-bottom: 12px;
-  transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s;
-  box-shadow: 0 4px 16px rgba(244,167,185,0.35);
-  position: relative;
-  z-index: 2;
-}
-.stop-pin.locked{
-  background: #f0e6ef;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
-.stop-pin.active{
-  background: linear-gradient(135deg, var(--pink-light), var(--lilac-light));
-  animation: pulse-pin 2s ease-in-out infinite;
-}
-.stop-pin.done{
-  background: linear-gradient(135deg, var(--mint-light), #c8f5ed);
-  animation: none;
-  transform: scale(1.08);
-}
+  .masthead-logo::after {
+    content: "";
+    display: block;
+    width: 72px;
+    margin: 7px auto 0;
+    border-bottom: 2px solid #111;
+  }
 
-@keyframes pulse-pin{
-  0%,100%{box-shadow: 0 4px 16px rgba(244,167,185,0.4), 0 0 0 0 rgba(244,167,185,0.4);}
-  50%{box-shadow: 0 4px 20px rgba(244,167,185,0.5), 0 0 0 10px rgba(244,167,185,0);}
-}
+  .masthead-rule {
+    border: none;
+    border-top: 1px solid #111;
+    margin: 8px 0 0;
+  }
 
-.stop-card{
-  width: 100%;
-  border-radius: var(--radius-lg);
-  padding: 22px 22px 18px;
-  border: 2px solid transparent;
-  transition: all 0.5s ease;
-}
-.stop-card.locked{
-  background: rgba(255,255,255,0.45);
-  border-color: rgba(255,255,255,0.6);
-  filter: blur(0px);
-}
-.stop-card.active{
-  background: var(--white);
-  border-color: var(--pink-light);
-  box-shadow: 0 8px 32px rgba(244,167,185,0.2);
-}
-.stop-card.done{
-  background: linear-gradient(135deg, #f0fdf8, #e8f8f5);
-  border-color: var(--mint);
-}
+  .byline-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #b8b0a5;
+    padding: 6px 24px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 10.5px;
+    color: #444;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
 
-.stop-label{
-  font-size: 0.65rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 4px;
-}
-.stop-name{
-  font-family: 'Playfair Display', serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 10px;
-}
-.stop-name.locked-text{color: #c9b8c2;}
+  .puzzle-body {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0;
+  }
 
-.divider{
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(244,167,185,0.4), transparent);
-  margin: 12px 0;
-}
-.divider.mint{background: linear-gradient(90deg, transparent, rgba(184,221,212,0.5), transparent);}
+  .grid-wrap {
+    padding: 20px 16px 20px 24px;
+    border-right: 1px solid #d1c9be;
+  }
 
-.clue-label{
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--pink-deep);
-  margin-bottom: 6px;
-}
-.clue-text{
-  font-size: 0.95rem;
-  line-height: 1.7;
-  color: var(--text);
-}
-.clue-text.locked-clue{
-  color: #c9b8c2;
-  font-style: italic;
-  font-size: 0.85rem;
-}
+  .grid {
+    display: inline-grid;
+    border: 2px solid #111;
+    line-height: 0;
+  }
 
-.done-badge{
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: var(--mint-light);
-  color: #2e7d6a;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 5px 14px;
-  border-radius: 99px;
-  border: 1.5px solid var(--mint);
-  margin-top: 10px;
-}
+  .cell {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #8d8d8d;
+    position: relative;
+    background: #fffdfa;
+  }
 
-/* ── "I'm Here" Button ── */
-.here-btn{
-  width: 100%;
-  margin-top: 14px;
-  background: linear-gradient(135deg, var(--pink), var(--pink-deep));
-  color: white;
-  border: none;
-  border-radius: 99px;
-  padding: 16px 24px;
-  font-family: 'Quicksand', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.2s;
-  box-shadow: 0 6px 20px rgba(232,120,154,0.4);
-}
-.here-btn:hover{transform: translateY(-2px); box-shadow: 0 10px 28px rgba(232,120,154,0.45);}
-.here-btn:active{transform: scale(0.97);}
+  .cell.black {
+    background: #111;
+    border-color: #111;
+  }
 
-/* avatar on path */
-.avatar{
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--pink), var(--lilac));
-  border: 3px solid white;
-  box-shadow: 0 4px 12px rgba(232,120,154,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
-  transition: top 1s cubic-bezier(.34,1.2,.64,1);
-}
+  .cell-num {
+    position: absolute;
+    top: 1.5px;
+    left: 2px;
+    font-size: 7.5px;
+    font-weight: 700;
+    color: #111;
+    font-family: 'Source Serif 4', serif;
+    line-height: 1;
+    z-index: 2;
+    pointer-events: none;
+  }
 
-/* ── Confetti overlay ── */
-#confetti-canvas{
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-}
+  .cell.active { background: #cfe3f8; }
+  .cell.word-active { background: #e7f1fb; }
 
-/* ── Final Modal ── */
-.modal-overlay{
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(90,62,75,0.6);
-  backdrop-filter: blur(8px);
-  z-index: 9998;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-.modal-overlay.show{display: flex;}
-.modal{
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  padding: 36px 28px 30px;
-  max-width: 400px;
-  width: 100%;
-  text-align: center;
-  animation: modalIn 0.6s cubic-bezier(.34,1.4,.64,1) forwards;
-}
-@keyframes modalIn{
-  from{opacity:0; transform: scale(0.8) translateY(30px);}
-  to{opacity:1; transform: scale(1) translateY(0);}
-}
-.modal-hearts{
-  font-size: 2.2rem;
-  margin-bottom: 8px;
-  animation: heartbeat 1.4s ease-in-out infinite;
-}
-@keyframes heartbeat{
-  0%,100%{transform: scale(1);}
-  50%{transform: scale(1.12);}
-}
-.modal h2{
-  font-family: 'Playfair Display', serif;
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 6px;
-}
-.modal-sub{
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 18px;
-}
-.photo-placeholder{
-  width: 100%;
-  aspect-ratio: 1/1;
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--pink-light), var(--lilac-light));
-  border: 2px dashed var(--pink);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 20px;
-  overflow: hidden;
-}
-.photo-placeholder .ph-icon{font-size: 2.4rem;}
-.photo-placeholder .ph-text{
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.modal-message{
-  font-size: 1rem;
-  line-height: 1.75;
-  color: var(--text);
-  margin-bottom: 24px;
-  font-style: italic;
-}
-.modal-close-btn{
-  background: linear-gradient(135deg, var(--pink), var(--lilac));
-  color: white;
-  border: none;
-  border-radius: 99px;
-  padding: 14px 32px;
-  font-family: 'Quicksand', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 6px 18px rgba(212,184,224,0.5);
-  transition: transform 0.15s;
-}
-.modal-close-btn:active{transform: scale(0.97);}
+  .cell input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #111;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    caret-color: transparent;
+    padding-top: 7px;
+  }
 
-/* ── Success toast for each step ── */
-.step-toast{
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%) scale(0.7);
-  background: white;
-  border-radius: var(--radius-lg);
-  padding: 24px 32px;
-  text-align: center;
-  z-index: 9997;
-  box-shadow: 0 24px 60px rgba(244,167,185,0.35);
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s cubic-bezier(.34,1.4,.64,1);
-  max-width: 280px;
-  width: 85%;
-}
-.step-toast.show{
-  opacity: 1;
-  transform: translate(-50%,-50%) scale(1);
-}
-.step-toast-emoji{font-size: 2.5rem; margin-bottom: 6px;}
-.step-toast-title{
-  font-family: 'Playfair Display', serif;
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--text);
-}
-.step-toast-sub{
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  margin-top: 4px;
-}
+  .hint-glyph {
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    font-weight: 700;
+    font-family: "Times New Roman", Times, serif;
+    color: #9a9a9a;
+    line-height: 1;
+    pointer-events: none;
+  }
 
-/* entrance animation for newly unlocked card */
-@keyframes cardReveal{
-  from{opacity:0; transform: translateY(24px) scale(0.95);}
-  to{opacity:1; transform: translateY(0) scale(1);}
-}
-.card-reveal{animation: cardReveal 0.6s cubic-bezier(.34,1.3,.64,1) forwards;}
+  .tick {
+    position: absolute;
+    bottom: 2px;
+    right: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #2f6f3e;
+    line-height: 1;
+    pointer-events: none;
+    z-index: 3;
+  }
 
-/* sparkle particles */
-.sparkle{
-  position: fixed;
-  pointer-events: none;
-  z-index: 9996;
-  font-size: 1.2rem;
-  animation: sparkleFly 1.2s ease forwards;
-}
-@keyframes sparkleFly{
-  0%{opacity:1; transform: translateY(0) scale(1);}
-  100%{opacity:0; transform: translateY(-120px) scale(0.3);}
-}
+  .clues-wrap {
+    padding: 16px 20px 16px 16px;
+  }
 
-@media(max-width:380px){
-  .header h1{font-size:1.6rem;}
-  .stop-name{font-size:1.1rem;}
-  .here-btn{font-size:0.9rem; padding:14px;}
-}
+  .clues-section {
+    margin-bottom: 16px;
+  }
+
+  .clues-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    border-bottom: 1px solid #111;
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+    color: #111;
+  }
+
+  .clue {
+    font-family: 'Source Serif 4', serif;
+    font-size: 12px;
+    margin: 6px 0;
+    color: #222;
+    line-height: 1.45;
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 5px;
+  }
+
+  .clue-num {
+    font-weight: 700;
+    color: #111;
+    font-size: 11.5px;
+    padding-top: 0.5px;
+  }
+
+  .letter-hint {
+    display: block;
+    font-style: italic;
+    color: #888;
+    font-size: 10.5px;
+    margin-top: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  .puzzle-footer {
+    border-top: 1px solid #d1c9be;
+    padding: 8px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Source Serif 4', serif;
+    font-size: 10px;
+    color: #7b7b7b;
+    letter-spacing: 0.04em;
+  }
+
+  .congrats {
+    display: none;
+    text-align: center;
+    font-family: "Times New Roman", Times, serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #185FA5;
+    padding: 8px 0 0;
+  }
+
+  .congrats.show { display: block; }
 </style>
 </head>
 <body>
+<div class="page">
 
-<canvas id="confetti-canvas"></canvas>
-
-<div class="header">
-  <div class="header-sub">A special adventure for you ♡</div>
-  <h1>Your <span>Indiranagar</span><br/>Treasure Hunt</h1>
-  <div class="progress-bar-wrap">
-    <div class="progress-bar" id="progress-bar" style="width:0%"></div>
-  </div>
-</div>
-
-<div class="map-container" id="map">
-
-  <!-- Stop 1 -->
-  <div class="stop" id="stop-0">
-    <div class="stop-pin active" id="pin-0">⛳</div>
-    <div class="stop-card active" id="card-0">
-      <div class="stop-label">Starting Point · Stop 1 of 4</div>
-      <div class="stop-name">Mini Golf Madness</div>
-      <div class="divider"></div>
-      <div class="clue-label">Your Next Clue</div>
-      <div class="clue-text">Thanks for bringing me to finishing the most athletic thing we've done all month. Now, Level 1: Walk toward the 100ft intersection. Look for the place that charges people money to be locked in a room — because apparently, Indiranagar rent isn't enough of a trap.</div>
-      <button class="here-btn" onclick="completeStep(0)">I'm here! ✓</button>
+  <div class="masthead">
+    <div class="masthead-top">
+      <span>Monday, April 14, 2025</span>
+      <span></span>
+      <span></span>
     </div>
+    <div class="masthead-logo">The Crossword</div>
+    <hr class="masthead-rule">
   </div>
 
-  <!-- Stop 2 -->
-  <div class="stop" id="stop-1">
-    <div class="stop-pin locked" id="pin-1">🔒</div>
-    <div class="stop-card locked" id="card-1">
-      <div class="stop-label">Stop 2 of 4</div>
-      <div class="stop-name locked-text">Mystery Rooms</div>
-      <div class="divider"></div>
-      <div class="clue-text locked-clue">Unlock by completing Stop 1 ♡</div>
+  <div class="byline-bar">
+    <span>Special Edition</span>
+  </div>
+
+  <div class="puzzle-body">
+    <div class="grid-wrap">
+      <div class="grid" id="grid"></div>
+      <div class="congrats" id="congrats">Solved! Well done.</div>
+    </div>
+
+    <div class="clues-wrap">
+      <div class="clues-section">
+        <div class="clues-title">Across</div>
+        <div class="clue">
+          <span class="clue-num">1.</span>
+          <span>
+            "I know you understand me more than anyone in this world" (7)
+            <span class="letter-hint">E _ _ _ _ _ _</span>
+          </span>
+        </div>
+        <div class="clue">
+          <span class="clue-num">2.</span>
+          <span>
+            "You are so considerate, even to people you barely know — and it is SO attractive" (8)
+            <span class="letter-hint">K _ _ _ _ _ _ _</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="clues-section">
+        <div class="clues-title">Down</div>
+        <div class="clue">
+          <span class="clue-num">3.</span>
+          <span>
+            "Your kindness extends beyond humans, and I fall in love every time this side of you comes out" (10)
+            <span class="letter-hint">Z _ _ _ _ _ _ _ _ _</span>
+          </span>
+        </div>
+        <div class="clue">
+          <span class="clue-num">4.</span>
+          <span>
+            "It's that YANKEE humor — yes, this is a mofy reference, what about it. Muah. I really admire how witty you are when it comes to being THIS way." (9)
+            <span class="letter-hint">S _ _ _ _ _ _ _ _</span>
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Stop 3 -->
-  <div class="stop" id="stop-2">
-    <div class="stop-pin locked" id="pin-2">🔒</div>
-    <div class="stop-card locked" id="card-2">
-      <div class="stop-label">Stop 3 of 4</div>
-      <div class="stop-name locked-text">Theobroma</div>
-      <div class="divider"></div>
-      <div class="clue-text locked-clue">Unlock by completing Stop 2 ♡</div>
-    </div>
-  </div>
-
-  <!-- Stop 4 -->
-  <div class="stop" id="stop-3">
-    <div class="stop-pin locked" id="pin-3">🔒</div>
-    <div class="stop-card locked" id="card-3">
-      <div class="stop-label">Final Destination · Stop 4 of 4</div>
-      <div class="stop-name locked-text">Balaji Flowers</div>
-      <div class="divider"></div>
-      <div class="clue-text locked-clue">Unlock by completing Stop 3 ♡</div>
-    </div>
-  </div>
-
-</div>
-
-<!-- Success toast -->
-<div class="step-toast" id="step-toast">
-  <div class="step-toast-emoji" id="toast-emoji">🎉</div>
-  <div class="step-toast-title" id="toast-title">Yay!</div>
-  <div class="step-toast-sub" id="toast-sub">Next clue unlocked</div>
-</div>
-
-<!-- Final modal -->
-<div class="modal-overlay" id="final-modal">
-  <div class="modal">
-    <div class="modal-hearts">💖</div>
-    <h2>You made it!</h2>
-    <div class="modal-sub">Adventure Complete · All 4 stops</div>
-    <div class="photo-placeholder">
-      <div class="ph-icon">📸</div>
-      <div class="ph-text">Your photo here</div>
-    </div>
-    <div class="modal-message">
-      I have something sparkly and something colorful for you! Look up! ❤️<br/><br/>
-      You are my favorite adventure — always.
-    </div>
-    <button class="modal-close-btn" onclick="document.getElementById('final-modal').classList.remove('show')">Love you ♡</button>
+  <div class="puzzle-footer">
+    <span>© The Crossword Co. · All Rights Reserved</span>
+    <span>No. 1,001</span>
   </div>
 </div>
 
 <script>
-const steps = [
-  {
-    emoji: '⛳',
-    name: 'Mini Golf Madness',
-    label: 'Starting Point · Stop 1 of 4',
-    clueLabel: 'Your Next Clue',
-    clue: 'Thanks for bringing me to finishing the most athletic thing we\'ve done all month. Now, Level 1: Walk toward the 100ft intersection. Look for the place that charges people money to be locked in a room — because apparently, Indiranagar rent isn\'t enough of a trap.',
-    toastEmoji: '🎊',
-    toastTitle: 'Stop 1 done!',
-    toastSub: 'Mystery Rooms unlocked ♡'
-  },
-  {
-    emoji: '🔐',
-    name: 'Mystery Rooms',
-    label: 'Stop 2 of 4',
-    clueLabel: 'Your Next Clue',
-    clue: 'No escapes today — just a sweet journey! Cross the 100ft road and keep going straight until you find a bakery for a treat.',
-    toastEmoji: '🍰',
-    toastTitle: 'Stop 2 done!',
-    toastSub: 'Theobroma unlocked ♡'
-  },
-  {
-    emoji: '🧁',
-    name: 'Theobroma',
-    label: 'Stop 3 of 4',
-    clueLabel: 'Your Next Clue',
-    clue: 'Follow the path to the very end of 12th Main, where the 80ft breeze meets the junction.',
-    toastEmoji: '✨',
-    toastTitle: 'Stop 3 done!',
-    toastSub: 'Final destination unlocked ♡'
-  },
-  {
-    emoji: '🌸',
-    name: 'Balaji Flowers',
-    label: 'Final Destination · Stop 4 of 4',
-    clueLabel: 'You\'re here!',
-    clue: 'I have something sparkly and something colorful for you! Look up! ❤️',
-    toastEmoji: '💖',
-    toastTitle: 'You did it!',
-    toastSub: 'Adventure complete! ♡',
-    isFinal: true
-  }
+const NROWS = 12, NCOLS = 12;
+
+const words = [
+  { word: 'EMPATHY',    dir: 'across', row: 4, col: 0, num: 1 },
+  { word: 'KINDNESS',   dir: 'across', row: 5, col: 4, num: 2 },
+  { word: 'ZOOPHILIST', dir: 'down',   row: 0, col: 5, num: 3 },
+  { word: 'SARCASTIC',  dir: 'down',   row: 3, col: 3, num: 4 },
 ];
 
-let current = 0;
+const gridData = Array.from({length: NROWS}, () => Array(NCOLS).fill(null));
+const numData  = Array.from({length: NROWS}, () => Array(NCOLS).fill(0));
+const hintSet  = new Set();
 
-function completeStep(idx){
-  if(idx !== current) return;
-  const step = steps[idx];
+words.forEach(({word, dir, row, col}) => {
+  for (let i = 0; i < word.length; i++) {
+    const r = dir === 'across' ? row : row + i;
+    const c = dir === 'across' ? col + i : col;
+    gridData[r][c] = word[i];
+  }
+});
 
-  // Show sparkles from button
-  spawnSparkles();
+words.forEach(({num, row, col}) => {
+  numData[row][col] = num;
+});
 
-  // Mark current as done
-  const pin = document.getElementById(`pin-${idx}`);
-  const card = document.getElementById(`card-${idx}`);
-  pin.className = 'stop-pin done';
-  pin.textContent = '✓';
-  card.className = 'stop-card done';
-  card.innerHTML = `
-    <div class="stop-label">${step.label}</div>
-    <div class="stop-name">${step.name}</div>
-    <div class="divider mint"></div>
-    <div class="done-badge">✓ Completed!</div>
-  `;
+const hints = [
+  {word:'EMPATHY',    hi:[0,3]},
+  {word:'KINDNESS',   hi:[0,4]},
+  {word:'ZOOPHILIST', hi:[0,5]},
+  {word:'SARCASTIC',  hi:[0,4]},
+];
 
-  current++;
-  const pct = (current / steps.length) * 100;
-  document.getElementById('progress-bar').style.width = pct + '%';
+hints.forEach(({word, hi}) => {
+  const w = words.find(x => x.word === word);
+  hi.forEach(i => {
+    const r = w.dir === 'across' ? w.row : w.row + i;
+    const c = w.dir === 'across' ? w.col + i : w.col;
+    hintSet.add(`${r},${c}`);
+  });
+});
 
-  // Show toast
-  const toast = document.getElementById('step-toast');
-  document.getElementById('toast-emoji').textContent = step.toastEmoji;
-  document.getElementById('toast-title').textContent = step.toastTitle;
-  document.getElementById('toast-sub').textContent = step.toastSub;
-  toast.classList.add('show');
+const userInput = Array.from({length: NROWS}, () => Array(NCOLS).fill(''));
+let activeCell = null;
+let activeDir  = 'across';
 
-  // Confetti burst
-  confettiBurst(step.isFinal ? 200 : 80, step.isFinal);
+const gridEl = document.getElementById('grid');
+gridEl.style.gridTemplateColumns = `repeat(${NCOLS}, 36px)`;
+gridEl.style.gridTemplateRows    = `repeat(${NROWS}, 36px)`;
 
-  setTimeout(()=>{
-    toast.classList.remove('show');
+const cellEls = [];
 
-    if(step.isFinal){
-      setTimeout(()=> document.getElementById('final-modal').classList.add('show'), 400);
-      return;
+for (let r = 0; r < NROWS; r++) {
+  cellEls[r] = [];
+  for (let c = 0; c < NCOLS; c++) {
+    const div = document.createElement('div');
+    const isBlack = gridData[r][c] === null;
+    div.className = 'cell' + (isBlack ? ' black' : '');
+
+    if (!isBlack) {
+      if (numData[r][c]) {
+        const n = document.createElement('span');
+        n.className = 'cell-num';
+        n.textContent = numData[r][c];
+        div.appendChild(n);
+      }
+
+      if (hintSet.has(`${r},${c}`)) {
+        const g = document.createElement('span');
+        g.className = 'hint-glyph';
+        g.textContent = gridData[r][c];
+        div.appendChild(g);
+      } else {
+        const inp = document.createElement('input');
+        inp.maxLength = 1;
+        inp.autocomplete = 'off';
+        inp.spellcheck = false;
+        inp.dataset.r = r;
+        inp.dataset.c = c;
+        div.appendChild(inp);
+
+        inp.addEventListener('focus', () => selectCell(r, c));
+        inp.addEventListener('click', () => {
+          if (activeCell && activeCell[0] === r && activeCell[1] === c) {
+            activeDir = activeDir === 'across' ? 'down' : 'across';
+            highlight();
+          }
+        });
+        inp.addEventListener('keydown', e => handleKey(e, r, c));
+        inp.addEventListener('input', e => handleInput(e, r, c));
+      }
     }
 
-    // Unlock next
-    unlockNext(current);
-  }, 1800);
+    gridEl.appendChild(div);
+    cellEls[r][c] = div;
+  }
 }
 
-function unlockNext(idx){
-  const step = steps[idx];
-  const pin = document.getElementById(`pin-${idx}`);
-  const card = document.getElementById(`card-${idx}`);
+function getInput(r, c) {
+  return cellEls[r]?.[c]?.querySelector('input');
+}
 
-  pin.className = 'stop-pin active';
-  pin.textContent = step.emoji;
+function selectCell(r, c) {
+  activeCell = [r, c];
+  if (activeDir === 'across' && !wordInDir(r, c, 'across')) activeDir = 'down';
+  if (activeDir === 'down' && !wordInDir(r, c, 'down')) activeDir = 'across';
+  highlight();
+  getInput(r, c)?.focus();
+}
 
-  card.className = 'stop-card active card-reveal';
-  card.innerHTML = `
-    <div class="stop-label">${step.label}</div>
-    <div class="stop-name">${step.name}</div>
-    <div class="divider"></div>
-    <div class="clue-label">${step.clueLabel}</div>
-    <div class="clue-text">${step.clue}</div>
-    ${step.isFinal
-      ? `<button class="here-btn" style="background:linear-gradient(135deg,#b8ddd4,#6dbfaa);box-shadow:0 6px 20px rgba(109,191,170,0.4)" onclick="completeStep(${idx})">I found it! 🌸</button>`
-      : `<button class="here-btn" onclick="completeStep(${idx})">I'm here! ✓</button>`
+function wordInDir(r, c, dir) {
+  if (dir === 'across') {
+    return (c > 0 && gridData[r][c - 1] !== null) || (c < NCOLS - 1 && gridData[r][c + 1] !== null);
+  } else {
+    return (r > 0 && gridData[r - 1][c] !== null) || (r < NROWS - 1 && gridData[r + 1][c] !== null);
+  }
+}
+
+function highlight() {
+  for (let r = 0; r < NROWS; r++) {
+    for (let c = 0; c < NCOLS; c++) {
+      cellEls[r][c].classList.remove('active', 'word-active');
     }
-  `;
-
-  // Scroll to newly unlocked card
-  setTimeout(()=>{
-    card.scrollIntoView({behavior:'smooth', block:'center'});
-  }, 300);
-}
-
-/* ── Confetti ── */
-const canvas = document.getElementById('confetti-canvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-let animId = null;
-
-function resizeCanvas(){
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-
-const COLORS = ['#f4a7b9','#d4b8e0','#ffcba4','#b8ddd4','#ffe082','#e8789a','#a8d5e2','#f9c6d0'];
-const SHAPES = ['circle','rect','heart'];
-
-function confettiBurst(count, isHeart){
-  particles = [];
-  const cx = canvas.width / 2;
-  for(let i=0;i<count;i++){
-    particles.push({
-      x: cx + (Math.random()-0.5)*200,
-      y: canvas.height * 0.35,
-      vx: (Math.random()-0.5)*8,
-      vy: -Math.random()*14 - 4,
-      size: Math.random()*8+4,
-      color: COLORS[Math.floor(Math.random()*COLORS.length)],
-      shape: isHeart ? 'heart' : SHAPES[Math.floor(Math.random()*SHAPES.length)],
-      rot: Math.random()*Math.PI*2,
-      rotV: (Math.random()-0.5)*0.2,
-      alpha: 1,
-      gravity: 0.35
-    });
   }
-  if(animId) cancelAnimationFrame(animId);
-  drawParticles();
-}
 
-function drawParticles(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  let alive = false;
-  for(const p of particles){
-    if(p.alpha<=0) continue;
-    alive = true;
-    ctx.save();
-    ctx.globalAlpha = p.alpha;
-    ctx.translate(p.x, p.y);
-    ctx.rotate(p.rot);
-    ctx.fillStyle = p.color;
-    if(p.shape==='circle'){
-      ctx.beginPath();
-      ctx.arc(0,0,p.size/2,0,Math.PI*2);
-      ctx.fill();
-    } else if(p.shape==='rect'){
-      ctx.fillRect(-p.size/2,-p.size/4,p.size,p.size/2);
-    } else {
-      drawHeart(ctx, p.size*0.7);
+  if (!activeCell) return;
+
+  const [ar, ac] = activeCell;
+  cellEls[ar][ac].classList.add('active');
+
+  if (activeDir === 'across') {
+    let sc = ac;
+    while (sc > 0 && gridData[ar][sc - 1] !== null) sc--;
+
+    let ec = ac;
+    while (ec < NCOLS - 1 && gridData[ar][ec + 1] !== null) ec++;
+
+    for (let c = sc; c <= ec; c++) {
+      if (c !== ac) cellEls[ar][c].classList.add('word-active');
     }
-    ctx.restore();
-    p.x += p.vx;
-    p.y += p.vy;
-    p.vy += p.gravity;
-    p.vx *= 0.99;
-    p.rot += p.rotV;
-    p.alpha -= 0.012;
+  } else {
+    let sr = ar;
+    while (sr > 0 && gridData[sr - 1][ac] !== null) sr--;
+
+    let er = ar;
+    while (er < NROWS - 1 && gridData[er + 1][ac] !== null) er++;
+
+    for (let r = sr; r <= er; r++) {
+      if (r !== ar) cellEls[r][ac].classList.add('word-active');
+    }
   }
-  if(alive) animId = requestAnimationFrame(drawParticles);
-  else ctx.clearRect(0,0,canvas.width,canvas.height);
 }
 
-function drawHeart(ctx, s){
-  ctx.beginPath();
-  ctx.moveTo(0,-s*0.3);
-  ctx.bezierCurveTo(s*0.5,-s*0.8, s,-s*0.3, 0, s*0.4);
-  ctx.bezierCurveTo(-s,-s*0.3, -s*0.5,-s*0.8, 0,-s*0.3);
-  ctx.fill();
+function handleInput(e, r, c) {
+  const raw = e.target.value.toUpperCase().replace(/[^A-Z]/g, '');
+  e.target.value = raw ? raw[raw.length - 1] : '';
+  userInput[r][c] = e.target.value;
+
+  const cell = cellEls[r][c];
+  const existingTick = cell.querySelector('.tick');
+  if (existingTick) existingTick.remove();
+
+  if (userInput[r][c] && userInput[r][c] === gridData[r][c]) {
+    const tick = document.createElement('span');
+    tick.className = 'tick';
+    tick.textContent = '✓';
+    cell.appendChild(tick);
+  }
+
+  if (e.target.value) advance(r, c);
+  checkSolved();
 }
 
-/* ── Sparkles ── */
-function spawnSparkles(){
-  const sparkles = ['✨','💫','⭐','🌟','💕'];
-  for(let i=0;i<8;i++){
-    const el = document.createElement('div');
-    el.className = 'sparkle';
-    el.textContent = sparkles[Math.floor(Math.random()*sparkles.length)];
-    el.style.left = (30 + Math.random()*40) + '%';
-    el.style.top = (40 + Math.random()*20) + '%';
-    el.style.animationDelay = (Math.random()*0.4) + 's';
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(), 1400);
+function handleKey(e, r, c) {
+  if (e.key === 'Backspace' && !getInput(r, c)?.value) {
+    retreat(r, c);
+  } else if (e.key === 'ArrowRight') {
+    e.preventDefault();
+    activeDir = 'across';
+    move(r, c, 0, 1);
+  } else if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    activeDir = 'across';
+    move(r, c, 0, -1);
+  } else if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    activeDir = 'down';
+    move(r, c, 1, 0);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    activeDir = 'down';
+    move(r, c, -1, 0);
   }
+}
+
+function move(r, c, dr, dc) {
+  const nr = r + dr, nc = c + dc;
+  if (
+    nr >= 0 && nr < NROWS &&
+    nc >= 0 && nc < NCOLS &&
+    gridData[nr][nc] !== null &&
+    !hintSet.has(`${nr},${nc}`)
+  ) {
+    selectCell(nr, nc);
+  }
+}
+
+function advance(r, c) {
+  if (activeDir === 'across') {
+    for (let nc = c + 1; nc < NCOLS; nc++) {
+      if (gridData[r][nc] === null) break;
+      if (!hintSet.has(`${r},${nc}`) && getInput(r, nc)) {
+        selectCell(r, nc);
+        return;
+      }
+    }
+  } else {
+    for (let nr = r + 1; nr < NROWS; nr++) {
+      if (gridData[nr][c] === null) break;
+      if (!hintSet.has(`${nr},${c}`) && getInput(nr, c)) {
+        selectCell(nr, c);
+        return;
+      }
+    }
+  }
+}
+
+function retreat(r, c) {
+  if (activeDir === 'across') {
+    for (let nc = c - 1; nc >= 0; nc--) {
+      if (gridData[r][nc] === null) break;
+      const inp = getInput(r, nc);
+      if (inp) {
+        inp.value = '';
+        userInput[r][nc] = '';
+        const existingTick = cellEls[r][nc].querySelector('.tick');
+        if (existingTick) existingTick.remove();
+        selectCell(r, nc);
+        return;
+      }
+    }
+  } else {
+    for (let nr = r - 1; nr >= 0; nr--) {
+      if (gridData[nr][c] === null) break;
+      const inp = getInput(nr, c);
+      if (inp) {
+        inp.value = '';
+        userInput[nr][c] = '';
+        const existingTick = cellEls[nr][c].querySelector('.tick');
+        if (existingTick) existingTick.remove();
+        selectCell(nr, c);
+        return;
+      }
+    }
+  }
+}
+
+function checkSolved() {
+  for (let r = 0; r < NROWS; r++) {
+    for (let c = 0; c < NCOLS; c++) {
+      if (gridData[r][c] === null || hintSet.has(`${r},${c}`)) continue;
+      if (userInput[r][c] !== gridData[r][c]) return;
+    }
+  }
+  document.getElementById('congrats').classList.add('show');
 }
 </script>
 </body>
