@@ -362,27 +362,26 @@ header h1 {
 
 <div id="modal-overlay">
   <div id="modal">
-    <span class="tag">Thing I love about you #14</span>
+    <span class="tag">Thing I love about you #13</span>
     <h2>Today's word was</h2>
-    <div class="word-reveal">SMART</div>
+    <div class="word-reveal">PLANNED</div>
     <div class="divider"></div>
-    <p>I love how fucking smart you are. Your brain is wired in such a sexy way. I am your trophy thank yew.</p>
+    <p>Like I never have had to not plan stuff, especially when hanging out with my friends. I loved that with you, since you are the same it is always so much easier. Muah. I love it.</p>
     <button id="continue-btn">Continue ♡</button>
   </div>
 </div>
 
 <script>
-const WORD        = 'SMART';
-const WORD_LENGTH = WORD.length;   // 5
+const WORD        = 'PLANNED';
+const WORD_LENGTH = WORD.length;
 const MAX_GUESSES = 6;
-const HINT_TEXT   = "I call you my silly girl ironically.";
+const HINT_TEXT   = "you are just like me, or I am just like you. Okay, we are the same. I like that we are anal like that.";
 
 let currentRow   = 0;
 let currentCol   = 0;
 let currentGuess = [];
 let gameOver     = false;
 
-// Build board dynamically
 const board = document.getElementById('board');
 for (let r = 0; r < MAX_GUESSES; r++) {
   const row = document.createElement('div');
@@ -406,7 +405,6 @@ for (let r = 0; r < MAX_GUESSES; r++) {
   board.appendChild(row);
 }
 
-// Build keyboard
 const KB_ROWS = [
   ['Q','W','E','R','T','Y','U','I','O','P'],
   ['A','S','D','F','G','H','J','K','L'],
@@ -425,7 +423,6 @@ KB_ROWS.forEach((keys, i) => {
   });
 });
 
-// Input
 document.addEventListener('keydown', e => {
   if (gameOver) return;
   if (e.key === 'Enter') handleKey('ENTER');
