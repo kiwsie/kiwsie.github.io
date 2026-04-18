@@ -1,255 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Daily Word</title>
 <link href="https://fonts.googleapis.com/css2?family=Clear+Sans:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+
 <style>
-:root {
-  --bg: #121213;
-  --surface: #1a1a1b;
-  --border: #3a3a3c;
-  --text: #ffffff;
-  --text-muted: #818384;
-  --green: #538d4e;
-  --yellow: #b59f3b;
-  --gray: #3a3a3c;
-  --key-bg: #818384;
-  --key-text: #ffffff;
-  --tile-size: 52px;
-  --gap: 5px;
-  --font-body: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
-  --font-display: 'Playfair Display', Georgia, serif;
-  --modal-bg: #1a1a1b;
+:root{
+--bg:#121213;
+--border:#3a3a3c;
+--text:#fff;
+--text-muted:#818384;
+--green:#538d4e;
+--yellow:#b59f3b;
+--gray:#3a3a3c;
+--key-bg:#818384;
+--tile-size:52px;
+--gap:5px;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*{box-sizing:border-box;margin:0;padding:0;}
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-body);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  overflow-x: hidden;
+body{
+background:var(--bg);
+color:var(--text);
+font-family:'Clear Sans',Arial,sans-serif;
+display:flex;
+flex-direction:column;
+align-items:center;
+min-height:100vh;
 }
 
-header {
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--border);
-  position: relative;
+header{
+width:100%;
+max-width:600px;
+display:flex;
+justify-content:center;
+padding:14px 16px;
+border-bottom:1px solid var(--border);
+position:relative;
 }
 
-header h1 {
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 1.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+h1{
+font-size:1.75rem;
+font-weight:700;
+letter-spacing:.08em;
+text-transform:uppercase;
 }
 
-#hint-btn {
-  position: absolute;
-  right: 16px;
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  font-size: 0.72rem;
-  font-family: var(--font-body);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
+#hint-btn{
+position:absolute;
+right:16px;
+background:none;
+border:1px solid var(--border);
+color:var(--text-muted);
+padding:6px 12px;
+border-radius:4px;
+cursor:pointer;
 }
 
-#toast-container {
-  position: fixed;
-  top: 70px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 200;
+#toast-container{
+position:fixed;
+top:70px;
+left:50%;
+transform:translateX(-50%);
+z-index:100;
 }
 
-.toast {
-  background: white;
-  color: black;
-  padding: 10px 18px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 700;
+.toast{
+background:#fff;
+color:#000;
+padding:10px 18px;
+border-radius:6px;
+font-weight:700;
 }
 
-#board-container {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 0 10px;
+#board-container{
+flex:1;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px 0;
 }
 
-#board {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
+#board{
+display:flex;
+flex-direction:column;
+gap:var(--gap);
 }
 
-.row {
-  display: flex;
-  gap: var(--gap);
+.row{
+display:flex;
+gap:var(--gap);
 }
 
-.tile {
-  width: var(--tile-size);
-  height: var(--tile-size);
-  border: 2px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:1.5rem;
-  font-weight:700;
-  text-transform:uppercase;
-  perspective:250px;
+.tile{
+width:var(--tile-size);
+height:var(--tile-size);
+border:2px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:1.5rem;
+font-weight:700;
+text-transform:uppercase;
+perspective:250px;
 }
 
 .tile-inner{
- width:100%;
- height:100%;
- display:flex;
- align-items:center;
- justify-content:center;
- transform-style:preserve-3d;
- position:relative;
+width:100%;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+position:relative;
+transform-style:preserve-3d;
 }
 
 .tile-front,.tile-back{
- position:absolute;
- width:100%;
- height:100%;
- display:flex;
- align-items:center;
- justify-content:center;
- backface-visibility:hidden;
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+backface-visibility:hidden;
 }
 
 .tile-back{
- transform:rotateX(180deg);
+transform:rotateX(180deg);
 }
 
-.tile.correct .tile-inner {background:var(--green);}
-.tile.present .tile-inner {background:var(--yellow);}
-.tile.absent .tile-inner {background:var(--gray);}
+.tile.correct .tile-inner{background:var(--green);}
+.tile.present .tile-inner{background:var(--yellow);}
+.tile.absent .tile-inner{background:var(--gray);}
 
-#keyboard {
-  width:100%;
-  max-width:520px;
-  padding:0 8px 24px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
+#keyboard{
+width:100%;
+max-width:520px;
+padding:0 8px 24px;
+display:flex;
+flex-direction:column;
+gap:8px;
 }
 
 .kb-row{
- display:flex;
- justify-content:center;
- gap:6px;
+display:flex;
+justify-content:center;
+gap:6px;
 }
 
 .key{
- height:58px;
- min-width:40px;
- border:none;
- border-radius:4px;
- background:var(--key-bg);
- color:white;
- font-weight:700;
- flex:1;
- max-width:43px;
+height:58px;
+min-width:40px;
+border:none;
+border-radius:4px;
+background:var(--key-bg);
+color:white;
+font-weight:700;
+flex:1;
+max-width:43px;
+cursor:pointer;
 }
 
-.key.wide{
- max-width:65px;
-}
+.key.wide{max-width:65px;}
 
 .key.correct{background:var(--green);}
 .key.present{background:var(--yellow);}
 .key.absent{background:var(--gray);}
 
 #modal-overlay{
- display:none;
- position:fixed;
- inset:0;
- background:rgba(0,0,0,.75);
- z-index:300;
- align-items:center;
- justify-content:center;
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.75);
+z-index:300;
+align-items:center;
+justify-content:center;
 }
 
 #modal-overlay.visible{
- display:flex;
+display:flex;
 }
 
 #modal{
- background:var(--modal-bg);
- border:1px solid #3a3a3c;
- border-radius:12px;
- padding:40px 36px;
- max-width:420px;
- width:90%;
- text-align:center;
+background:#1a1a1b;
+border:1px solid var(--border);
+border-radius:12px;
+padding:40px 36px;
+max-width:420px;
+width:90%;
+text-align:center;
 }
 
-#modal .tag{
- font-size:.72rem;
- letter-spacing:.15em;
- color:var(--text-muted);
- margin-bottom:20px;
- display:block;
+.tag{
+font-size:.72rem;
+letter-spacing:.15em;
+color:var(--text-muted);
+display:block;
+margin-bottom:20px;
 }
 
 #modal h2{
- font-family:var(--font-display);
- font-style:italic;
- margin-bottom:8px;
+font-family:'Playfair Display',serif;
+font-style:italic;
+margin-bottom:8px;
 }
 
 .word-reveal{
- font-size:2.2rem;
- font-weight:700;
- color:var(--green);
- margin-bottom:24px;
- letter-spacing:.18em;
+font-size:2.2rem;
+font-weight:700;
+letter-spacing:.18em;
+color:var(--green);
+margin-bottom:24px;
 }
 
 #modal p{
- font-family:var(--font-display);
- font-style:italic;
- line-height:1.75;
- margin-bottom:32px;
+font-family:'Playfair Display',serif;
+font-style:italic;
+line-height:1.75;
+margin-bottom:32px;
 }
 
 #continue-btn{
- background:white;
- color:black;
- border:none;
- padding:14px 36px;
- border-radius:6px;
- font-weight:700;
+background:#fff;
+color:#000;
+border:none;
+padding:14px 36px;
+border-radius:6px;
+font-weight:700;
+cursor:pointer;
 }
 
-@media (max-width:480px){
- :root{--tile-size:40px;}
+@media(max-width:480px){
+:root{--tile-size:40px;}
 }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -271,28 +260,31 @@ header h1 {
 
 <div id="modal-overlay">
 <div id="modal">
-<span class="tag">Thing I love about you #12</span>
+
+<span class="tag">Thing I love about you #3</span>
+
 <h2>Today's word was</h2>
-<div class="word-reveal">SECURE</div>
+
+<div class="word-reveal">CRAZY</div>
+
 <div style="width:40px;height:1px;background:#3a3a3c;margin:0 auto 24px;"></div>
 
 <p>
-I feel so secure in our relationship. I know this is something so rare.
-We have gone through so many fights, tough days, years even.
-Thank you for making me feel so secure.
+I love how cuckoo you are my crazy ass muah.
+Keep up the game, I will be out-crazying you for the rest of our lives.
 </p>
 
 <button id="continue-btn">Continue ♡</button>
+
 </div>
 </div>
 
 <script>
-const WORD='SECURE';
+const WORD='CRAZY';
 const WORD_LENGTH=WORD.length;
 const MAX_GUESSES=6;
 
-const HINT_TEXT=
-"The reason my anxiety and my overthinking is regulated is because I have this in our relationship, and because you make me feel this.";
+const HINT_TEXT="this actually turns me on ;)";
 
 let currentRow=0;
 let currentCol=0;
@@ -302,30 +294,30 @@ let gameOver=false;
 const board=document.getElementById('board');
 
 for(let r=0;r<MAX_GUESSES;r++){
- let row=document.createElement('div');
- row.classList.add('row');
- row.id=`row-${r}`;
+let row=document.createElement('div');
+row.classList.add('row');
+row.id=`row-${r}`;
 
- for(let c=0;c<WORD_LENGTH;c++){
-   let tile=document.createElement('div');
-   tile.classList.add('tile');
-   tile.id=`tile-${r}-${c}`;
+for(let c=0;c<WORD_LENGTH;c++){
+let tile=document.createElement('div');
+tile.classList.add('tile');
+tile.id=`tile-${r}-${c}`;
 
-   let inner=document.createElement('div');
-   inner.classList.add('tile-inner');
+let inner=document.createElement('div');
+inner.classList.add('tile-inner');
 
-   let front=document.createElement('div');
-   front.classList.add('tile-front');
+let front=document.createElement('div');
+front.classList.add('tile-front');
 
-   let back=document.createElement('div');
-   back.classList.add('tile-back');
+let back=document.createElement('div');
+back.classList.add('tile-back');
 
-   inner.append(front,back);
-   tile.appendChild(inner);
-   row.appendChild(tile);
- }
+inner.append(front,back);
+tile.appendChild(inner);
+row.appendChild(tile);
+}
 
- board.appendChild(row);
+board.appendChild(row);
 }
 
 const KB_ROWS=[
@@ -335,204 +327,186 @@ const KB_ROWS=[
 ];
 
 KB_ROWS.forEach((keys,i)=>{
- let rowEl=document.getElementById(`kb-row-${i+1}`);
+let rowEl=document.getElementById(`kb-row-${i+1}`);
 
- keys.forEach(k=>{
-   let btn=document.createElement('button');
-   btn.classList.add('key');
-   if(k==='ENTER'||k==='⌫') btn.classList.add('wide');
-   btn.textContent=k;
-   btn.dataset.key=k;
-
-   btn.onclick=()=>handleKey(k);
-
-   rowEl.appendChild(btn);
- });
+keys.forEach(k=>{
+let btn=document.createElement('button');
+btn.classList.add('key');
+if(k==='ENTER'||k==='⌫')btn.classList.add('wide');
+btn.textContent=k;
+btn.dataset.key=k;
+btn.onclick=()=>handleKey(k);
+rowEl.appendChild(btn);
+});
 });
 
 document.addEventListener('keydown',e=>{
- if(gameOver)return;
+if(gameOver)return;
 
- if(e.key==='Enter') handleKey('ENTER');
- else if(e.key==='Backspace') handleKey('⌫');
- else if(/^[a-zA-Z]$/.test(e.key))
-   handleKey(e.key.toUpperCase());
+if(e.key==='Enter')handleKey('ENTER');
+else if(e.key==='Backspace')handleKey('⌫');
+else if(/^[a-zA-Z]$/.test(e.key))handleKey(e.key.toUpperCase());
 });
 
 function handleKey(key){
- if(gameOver)return;
+if(gameOver)return;
 
- if(key==='⌫') deleteLetter();
- else if(key==='ENTER') submitGuess();
- else addLetter(key);
+if(key==='⌫')deleteLetter();
+else if(key==='ENTER')submitGuess();
+else addLetter(key);
 }
 
 function addLetter(letter){
- if(currentCol>=WORD_LENGTH)return;
+if(currentCol>=WORD_LENGTH)return;
 
- currentGuess.push(letter);
+currentGuess.push(letter);
 
- let tile=getTile(currentRow,currentCol);
+let tile=getTile(currentRow,currentCol);
+tile.querySelector('.tile-front').textContent=letter;
+tile.querySelector('.tile-back').textContent=letter;
 
- tile.querySelector('.tile-front').textContent=letter;
- tile.querySelector('.tile-back').textContent=letter;
-
- currentCol++;
+currentCol++;
 }
 
 function deleteLetter(){
- if(currentCol<=0)return;
+if(currentCol<=0)return;
 
- currentCol--;
- currentGuess.pop();
+currentCol--;
+currentGuess.pop();
 
- let tile=getTile(currentRow,currentCol);
+let tile=getTile(currentRow,currentCol);
 
- tile.querySelector('.tile-front').textContent='';
- tile.querySelector('.tile-back').textContent='';
+tile.querySelector('.tile-front').textContent='';
+tile.querySelector('.tile-back').textContent='';
 }
 
 function submitGuess(){
 
- if(currentCol<WORD_LENGTH){
-   showToast("Not enough letters");
-   return;
- }
+if(currentCol<WORD_LENGTH){
+showToast("Not enough letters");
+return;
+}
 
- let guess=currentGuess.join('');
- let result=evaluate(guess);
+let guess=currentGuess.join('');
+let result=evaluate(guess);
 
- revealRow(currentRow,result,()=>{
+revealRow(currentRow,result,()=>{
 
-   updateKeyboard(guess,result);
+updateKeyboard(guess,result);
 
-   if(guess===WORD){
-      gameOver=true;
-      setTimeout(showModal,1200);
-   }
-   else{
-     currentRow++;
-     currentCol=0;
-     currentGuess=[];
+if(guess===WORD){
+gameOver=true;
+setTimeout(showModal,1200);
+}
+else{
+currentRow++;
+currentCol=0;
+currentGuess=[];
 
-     if(currentRow>=MAX_GUESSES){
-       gameOver=true;
-       showToast(WORD);
-     }
-   }
+if(currentRow>=MAX_GUESSES){
+gameOver=true;
+showToast(WORD);
+}
+}
 
- });
+});
 
 }
 
 function evaluate(guess){
 
- let result=Array(WORD_LENGTH).fill('absent');
+let result=Array(WORD_LENGTH).fill('absent');
 
- let wordArr=WORD.split('');
- let guessArr=guess.split('');
+let wordArr=WORD.split('');
+let guessArr=guess.split('');
+let used=Array(WORD_LENGTH).fill(false);
 
- let used=Array(WORD_LENGTH).fill(false);
+for(let i=0;i<WORD_LENGTH;i++){
+if(guessArr[i]===wordArr[i]){
+result[i]='correct';
+used[i]=true;
+}
+}
 
- for(let i=0;i<WORD_LENGTH;i++){
-   if(guessArr[i]===wordArr[i]){
-      result[i]='correct';
-      used[i]=true;
-   }
- }
+for(let i=0;i<WORD_LENGTH;i++){
 
- for(let i=0;i<WORD_LENGTH;i++){
+if(result[i]==='correct')continue;
 
-   if(result[i]==='correct') continue;
+for(let j=0;j<WORD_LENGTH;j++){
 
-   for(let j=0;j<WORD_LENGTH;j++){
+if(!used[j]&&guessArr[i]===wordArr[j]){
+result[i]='present';
+used[j]=true;
+break;
+}
 
-     if(!used[j] && guessArr[i]===wordArr[j]){
-        result[i]='present';
-        used[j]=true;
-        break;
-     }
+}
 
-   }
+}
 
- }
-
- return result;
-
+return result;
 }
 
 function revealRow(row,result,callback){
 
- for(let c=0;c<WORD_LENGTH;c++){
+for(let c=0;c<WORD_LENGTH;c++){
 
-   setTimeout(()=>{
+setTimeout(()=>{
 
-     let tile=getTile(row,c);
-     tile.classList.add(result[c]);
+let tile=getTile(row,c);
 
-     tile.querySelector('.tile-inner').style.transform='rotateX(360deg)';
+tile.classList.add(result[c]);
 
-   },c*300);
+tile.querySelector('.tile-inner').style.transform='rotateX(360deg)';
 
- }
+},c*300);
 
- setTimeout(callback,WORD_LENGTH*300+500);
+}
+
+setTimeout(callback,WORD_LENGTH*300+500);
 
 }
 
 function updateKeyboard(guess,result){
 
- for(let i=0;i<WORD_LENGTH;i++){
+for(let i=0;i<WORD_LENGTH;i++){
 
-   let btn=document.querySelector(
-   `.key[data-key="${guess[i]}"]`);
+let btn=document.querySelector(`.key[data-key="${guess[i]}"]`);
 
-   if(btn){
-      btn.classList.add(result[i]);
-   }
+if(btn)btn.classList.add(result[i]);
 
- }
+}
 
 }
 
 function showToast(msg){
 
- let container=document.getElementById('toast-container');
+let container=document.getElementById('toast-container');
 
- let toast=document.createElement('div');
- toast.classList.add('toast');
- toast.textContent=msg;
+let toast=document.createElement('div');
+toast.classList.add('toast');
+toast.textContent=msg;
 
- container.appendChild(toast);
+container.appendChild(toast);
 
- setTimeout(()=>toast.remove(),3000);
+setTimeout(()=>toast.remove(),3000);
 
 }
 
 function showModal(){
- document.getElementById(
- 'modal-overlay'
- ).classList.add('visible');
+document.getElementById('modal-overlay').classList.add('visible');
 }
 
-document.getElementById(
-'continue-btn'
-).onclick=()=>{
-document.getElementById(
-'modal-overlay'
-).classList.remove('visible');
+document.getElementById('continue-btn').onclick=()=>{
+document.getElementById('modal-overlay').classList.remove('visible');
 };
 
-document.getElementById(
-'hint-btn'
-).onclick=()=>{
- showToast(HINT_TEXT);
+document.getElementById('hint-btn').onclick=()=>{
+showToast(HINT_TEXT);
 };
 
 function getTile(r,c){
- return document.getElementById(
- `tile-${r}-${c}`
- );
+return document.getElementById(`tile-${r}-${c}`);
 }
 </script>
 
