@@ -261,17 +261,18 @@ cursor:pointer;
 <div id="modal-overlay">
 <div id="modal">
 
-<span class="tag">Thing I love about you #3</span>
+<span class="tag">Thing I love about you #2</span>
 
 <h2>Today's word was</h2>
 
-<div class="word-reveal">CRAZY</div>
+<div class="word-reveal">DRIVEN</div>
 
 <div style="width:40px;height:1px;background:#3a3a3c;margin:0 auto 24px;"></div>
 
 <p>
-I love how cuckoo you are my crazy ass muah.
-Keep up the game, I will be out-crazying you for the rest of our lives.
+I love how motivated and driven you are.
+When you set your mind to something you don't give up until you achieve it.
+Muah.
 </p>
 
 <button id="continue-btn">Continue ♡</button>
@@ -280,11 +281,11 @@ Keep up the game, I will be out-crazying you for the rest of our lives.
 </div>
 
 <script>
-const WORD='CRAZY';
+const WORD='DRIVEN';
 const WORD_LENGTH=WORD.length;
 const MAX_GUESSES=6;
 
-const HINT_TEXT="this actually turns me on ;)";
+const HINT_TEXT="Makes me want to get my ass up.";
 
 let currentRow=0;
 let currentCol=0;
@@ -375,7 +376,6 @@ currentCol--;
 currentGuess.pop();
 
 let tile=getTile(currentRow,currentCol);
-
 tile.querySelector('.tile-front').textContent='';
 tile.querySelector('.tile-back').textContent='';
 }
@@ -429,19 +429,15 @@ used[i]=true;
 }
 
 for(let i=0;i<WORD_LENGTH;i++){
-
 if(result[i]==='correct')continue;
 
 for(let j=0;j<WORD_LENGTH;j++){
-
 if(!used[j]&&guessArr[i]===wordArr[j]){
 result[i]='present';
 used[j]=true;
 break;
 }
-
 }
-
 }
 
 return result;
@@ -450,17 +446,11 @@ return result;
 function revealRow(row,result,callback){
 
 for(let c=0;c<WORD_LENGTH;c++){
-
 setTimeout(()=>{
-
 let tile=getTile(row,c);
-
 tile.classList.add(result[c]);
-
 tile.querySelector('.tile-inner').style.transform='rotateX(360deg)';
-
 },c*300);
-
 }
 
 setTimeout(callback,WORD_LENGTH*300+500);
@@ -468,29 +458,19 @@ setTimeout(callback,WORD_LENGTH*300+500);
 }
 
 function updateKeyboard(guess,result){
-
 for(let i=0;i<WORD_LENGTH;i++){
-
 let btn=document.querySelector(`.key[data-key="${guess[i]}"]`);
-
 if(btn)btn.classList.add(result[i]);
-
 }
-
 }
 
 function showToast(msg){
-
 let container=document.getElementById('toast-container');
-
 let toast=document.createElement('div');
 toast.classList.add('toast');
 toast.textContent=msg;
-
 container.appendChild(toast);
-
 setTimeout(()=>toast.remove(),3000);
-
 }
 
 function showModal(){
